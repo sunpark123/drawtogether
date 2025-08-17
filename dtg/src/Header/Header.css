@@ -80,12 +80,22 @@
         top: 100px;
         left: calc(100% - 100px);
     }
+    .drawToolBox{
+        width: 200px;
+        height: 50px;
+        float: left;
+    }
     .drawButton{
         width: 50px;
         height: 50px;
         float: left;
         cursor: pointer;
+        background-color: white;
+        position: absolute;
         outline: 1px solid lightgray;
+        left:calc(1px * var(--i));
+        animation-duration: calc(var(--t) * 1s);
+        animation-name: drawToolButtonleftToRight;
         p{
             width: 50px;
             height: 50px;
@@ -95,5 +105,14 @@
     }
     .drawButton:hover{
         background-color: antiquewhite;
+    }
+}
+
+@keyframes drawToolButtonleftToRight {
+    from{
+        left:-150px;
+    }
+    to{
+        left:calc(1px * var(--i));
     }
 }

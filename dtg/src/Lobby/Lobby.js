@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import './Lobby.css';
 import Draw from '../Draw/Draw';
-function Lobby( {locate} ) {
+function Lobby( {locate, tool, size} ) {
 
 	const [lobbyTextX, setLobbyTextX] = useState(150);
 
 	useEffect(() => {
 		if(locate === "lobby") setLobbyTextX(50);
 		if(locate === "draw") setLobbyTextX(150);
-		console.log(locate)
-		console.log(locate === "draw")
 	}, [locate])
 	return (
 		<>
@@ -22,7 +20,7 @@ function Lobby( {locate} ) {
 				</div>
 				
 			</div>
-			{lobbyTextX === 150 && <Draw/>}
+			{lobbyTextX === 150 && <Draw tool={tool} size={size}/>}
 			
 		</>
 	);

@@ -16,19 +16,22 @@ function App() {
 function AppContent() {
 	const navigate = useNavigate();
 	const [locate, setLocate] = useState("lobby");
-
+	
 	const moveLocate = (loc) => {
 		navigate("/" + loc);
 		setLocate(loc);
 	};
 
+	const [tool, setTool] = useState("pen");
+	const [size, setSize] = useState(5);
+
 	return (
 		<>
-			<Header locate={locate} moveLocate={moveLocate} />
+			<Header locate={locate} moveLocate={moveLocate} tool={tool} setTool={setTool} size={size} setSize={setSize}/>
 
 			<Routes>
 				<Route path="*" element={<Lobby locate={locate}/>} />
-				<Route path="/draw" element={<Lobby />} />
+				<Route path="/draw" element={<Lobby tool={tool} size={size}/>} />
 			</Routes>
 		</>
 	);
