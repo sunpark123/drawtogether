@@ -1,3 +1,4 @@
+import Cursor from './Cursor';
 import './Draw.css'
 import React, { useRef, useEffect, useState } from "react";
 
@@ -139,7 +140,9 @@ function Draw( {tool, size} ) {
                     onMouseMove={draw}
                     onMouseUp={stopDrawing}
                 />
+                <Cursor />
             </div>
+            
 		</>
 	);
 }

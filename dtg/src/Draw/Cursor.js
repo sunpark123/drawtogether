@@ -1,0 +1,32 @@
+import { useState, useEffect } from "react";
+
+function Cursor() {
+    const [pos, setPos] = useState({ x: 0, y: 0 });
+    const [cursorSize, setCursorSize] = useState(50);
+    const [penCursorImagePath] = useState("cursor.png")
+
+    useEffect(() => {
+        const handleMove = (e) => setPos({ x: e.clientX, y: e.clientY });
+        window.addEventListener("mousemove", handleMove);
+        return () => window.removeEventListener("mousemove", handleMove);
+    }, []);
+    return (
+        <div
+            style={{
+                position: "fixed",
+                left: pos.x,
+                top: pos.y,
+                width: `${cursorSize}px`,
+                height: `${cursorSize}px`,
+                backgroundImage: `url('/${penCursorImagePath}')`,
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                pointerEvents: "none",
+                transform: "translate(-50%, -50%)",
+                transition: "width 0.2s ease, height 0.2s ease",
+            }}
+        />
+    );
+}
+
+export default Cursor;
