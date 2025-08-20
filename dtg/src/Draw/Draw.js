@@ -3,9 +3,9 @@ import './Draw.css'
 import React, { useRef, useEffect, useState } from "react";
 
 
-function Draw( {tool, size} ) {
+function Draw( {tool = "pen", size = 5, color = "black"} ) {
     const canvasRef = useRef(null);
-    const [drawing, setDrawing] = useState();
+    const [drawing, setDrawing] = useState(false);
 
     const [history, setHistory] = useState([]);
     const [undoHistory, setUndoHistory] = useState([]);
@@ -75,8 +75,8 @@ function Draw( {tool, size} ) {
         
         let dx = e.nativeEvent.offsetX;
         let dy = e.nativeEvent.offsetY
-        
-        setCurrentStroke({ tool: tool, color: "black", size: size, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
+        console.log(tool);
+        setCurrentStroke({ tool: tool, color: color, size: size, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
         
     };
 
@@ -100,7 +100,9 @@ function Draw( {tool, size} ) {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
         const drawStroke = (drawInfo) => {
-        const { tool, color, size, path: paths } = drawInfo;
+            if(drawInfo === null) return;
+            
+            const { tool, color, size, path: paths } = drawInfo;
             if (paths.length < 2) return;
 
             ctx.beginPath();

@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import './Header.css';
+import { SketchPicker } from 'react-color';
 
-
-function Header( {locate, moveLocate, tool, setTool, size, setSize} ) {
+function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setColor} ) {
     const [headerLeft, setHeaderLeft] = useState(0);
+    const [colorSeleterOpen, setColorSeleterOpen] = useState(false);
 
     useEffect(() => {
         setHeaderLeft((locate === "lobby") ? 0 : -300);
     }, [locate])
-  
+    
+
 	return (
 		<>
             <div className='header' style={{left:`${headerLeft}px`}}>
@@ -79,41 +81,23 @@ function Header( {locate, moveLocate, tool, setTool, size, setSize} ) {
                     </div>
                     
                     <div className='drawToolBox' style={{ '--t' : 3}}>
-                        <div className="drawButton" style={{ '--i': 0 }}>
-                            <p>Pen</p>
-                        </div>
-                        <div className="drawButton" style={{ '--i': 50 }}>
-                            <p>Es</p>
+                        <div className="drawButton" style={{ '--i': 50 }} onClick={() => setColorSeleterOpen(!colorSeleterOpen)}>
+                            <p>Color</p>
                         </div>
                     </div>
-                    <div className='drawToolBox' style={{ '--t' : 4}}>
-                        <div className="drawButton" style={{ '--i': 0 }}>
-                            <p>Pen</p>
-                        </div>
-                        <div className="drawButton" style={{ '--i': 50 }}>
-                            <p>Es</p>
-                        </div>
-                    </div>
-                    <div className='drawToolBox' style={{ '--t' : 5}}>
-                        <div className="drawButton" style={{ '--i': 0 }}>
-                            <p>Pen</p>
-                        </div>
-                        <div className="drawButton" style={{ '--i': 50 }}>
-                            <p>Es</p>
-                        </div>
-                    </div>
-                    <div className='drawToolBox' style={{ '--t' : 6}}>
-                        <div className="drawButton" style={{ '--i': 0 }}>
-                            <p>Pen</p>
-                        </div>
-                        <div className="drawButton" style={{ '--i': 50 }}>
-                            <p>Es</p>
-                        </div>
-                    </div>
+                    
                     
                  
                 </div>
                 
+            </div>
+            <div className='colorSeleter' style={{ 
+                display: colorSeleterOpen ? "block" : "none",
+             }}>
+                <SketchPicker 
+                    color={color}
+                    onChange={setColor}
+                />
             </div>
 		</>
 	);

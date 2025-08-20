@@ -116,3 +116,12 @@
         left:calc(1px * var(--i));
     }
 }
+
+
+.colorSeleter{
+    position: fixed;
+    top:100%;
+    left:120px;
+    z-index: 100;
+    transform: translateY(-105%);
+}

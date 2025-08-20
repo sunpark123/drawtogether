@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './Lobby.css';
 import Draw from '../Draw/Draw';
-function Lobby( {locate, tool, size} ) {
+function Lobby( {locate, tool, size, color} ) {
 
 	const [lobbyTextX, setLobbyTextX] = useState(150);
 
@@ -20,7 +20,7 @@ function Lobby( {locate, tool, size} ) {
 				</div>
 				
 			</div>
-			{lobbyTextX === 150 && <Draw tool={tool} size={size}/>}
+			{lobbyTextX === 150 && <Draw tool={tool} size={size} color={color}/>}
 			
 		</>
 	);

@@ -22,6 +22,8 @@ function Cursor( {size} ) {
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
                 pointerEvents: "none",
+                outline: "1px solid gray",
+                borderRadius: "100%",
                 transform: "translate(-50%, -50%)",
                 transition: "width 0.2s ease, height 0.2s ease",
             }}

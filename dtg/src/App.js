@@ -24,14 +24,25 @@ function AppContent() {
 
 	const [tool, setTool] = useState("pen");
 	const [size, setSize] = useState(5);
+	const [color, setColor] = useState("#000000");
+
 
 	return (
 		<>
-			<Header locate={locate} moveLocate={moveLocate} tool={tool} setTool={setTool} size={size} setSize={setSize}/>
+			<Header 
+				locate={locate} 
+				moveLocate={moveLocate} 
+				tool={tool}
+				setTool={setTool} 
+				size={size} 
+				setSize={setSize}
+				color={color}
+				setColor={setColor}
+			/>
 
 			<Routes>
 				<Route path="*" element={<Lobby locate={locate}/>} />
-				<Route path="/draw" element={<Lobby tool={tool} size={size}/>} />
+				<Route path="/draw" element={<Lobby tool={tool} size={size} color={color.hex}/>} />
 			</Routes>
 		</>
 	);
