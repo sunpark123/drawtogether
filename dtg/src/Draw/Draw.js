@@ -140,7 +140,7 @@ function Draw( {tool, size} ) {
                     onMouseMove={draw}
                     onMouseUp={stopDrawing}
                 />
-                <Cursor />
+                <Cursor size={size}/>
             </div>
             
 		</>

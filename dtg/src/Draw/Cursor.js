@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function Cursor() {
+function Cursor( {size} ) {
     const [pos, setPos] = useState({ x: 0, y: 0 });
     const [cursorSize, setCursorSize] = useState(50);
     const [penCursorImagePath] = useState("cursor.png")
@@ -16,8 +16,8 @@ function Cursor() {
                 position: "fixed",
                 left: pos.x,
                 top: pos.y,
-                width: `${cursorSize}px`,
-                height: `${cursorSize}px`,
+                width: `${size}px`,
+                height: `${size}px`,
                 backgroundImage: `url('/${penCursorImagePath}')`,
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
