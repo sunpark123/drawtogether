@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './Header.css';
 import { SketchPicker } from 'react-color';
 
 function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setColor} ) {
     const [headerLeft, setHeaderLeft] = useState(0);
     const [colorSeleterOpen, setColorSeleterOpen] = useState(false);
+    const colorPicker = useRef();
 
     useEffect(() => {
         setHeaderLeft((locate === "lobby") ? 0 : -300);
     }, [locate])
     
-
+  
 	return (
 		<>
             <div className='header' style={{left:`${headerLeft}px`}}>
@@ -81,8 +82,13 @@ function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setCo
                     </div>
                     
                     <div className='drawToolBox' style={{ '--t' : 3}}>
-                        <div className="drawButton" style={{ '--i': 50 }} onClick={() => setColorSeleterOpen(!colorSeleterOpen)}>
-                            <p>Color</p>
+                        <div className="drawButton" 
+                            style={{
+                                    '--i': 50,
+                                    backgroundColor: colorPicker?.current?.state?.hex ?? "black",
+                                    borderRadius: '100%'
+                                }}
+                            onClick={() => setColorSeleterOpen(!colorSeleterOpen)}>
                         </div>
                     </div>
                     
@@ -95,6 +101,7 @@ function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setCo
                 display: colorSeleterOpen ? "block" : "none",
              }}>
                 <SketchPicker 
+                    ref={colorPicker}
                     color={color}
                     onChange={setColor}
                 />
