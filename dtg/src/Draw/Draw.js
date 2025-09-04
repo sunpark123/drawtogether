@@ -135,13 +135,19 @@ function Draw( {tool = "pen", size = 5, color = "black"} ) {
 
 	return (
 		<>
-            <div className="draw">
+            <div className="draw"
+                style={{
+                    backgroundImage: `url('/background.jpg')`,
+                    backgroundAttachment: 'fixed',
+                }}
+            >
                 <canvas
                     ref={canvasRef}
                     onMouseDown={startDrawing}
                     onMouseMove={draw}
                     onMouseUp={stopDrawing}
-                />
+                >
+                </canvas>
                 <Cursor size={size}/>
             </div>
             

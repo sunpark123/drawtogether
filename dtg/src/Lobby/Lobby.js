@@ -11,7 +11,10 @@ function Lobby( {locate, tool, size, color} ) {
 	}, [locate])
 	return (
 		<>
-			<div className='lobby'>
+			<div className='lobby' style={{
+				backgroundImage: `url('/background.jpg')`,
+				backgroundAttachment: 'fixed'
+			}}>
 				<div className='textBox' style={{ left:`${lobbyTextX}%`, top:`${lobbyTextX}%`}}>
 					<span>D</span><span>r</span><span>a</span><span>w</span> <br></br>
 					<span id='spanT'>T</span><span>o</span> <br></br>

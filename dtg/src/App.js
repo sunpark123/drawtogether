@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-route
 
 import Header from "./Header/Header";
 import Lobby from "./Lobby/Lobby";
-
+import Login from "./Login/Login";
+import Register from "./Login/Register"
 function App() {
   return (
 		<Router>
@@ -43,6 +44,8 @@ function AppContent() {
 			<Routes>
 				<Route path="*" element={<Lobby locate={locate}/>} />
 				<Route path="/draw" element={<Lobby tool={tool} size={size} color={color.hex}/>} />
+				<Route path="/login" element={<Login moveLocate={moveLocate}/>}/>
+				<Route path="/register" element={<Register moveLocate={moveLocate}/>}/>
 			</Routes>
 		</>
 	);
