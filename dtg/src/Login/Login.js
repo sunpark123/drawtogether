@@ -4,14 +4,32 @@ import { userLogin } from '../Api';
 function Login( { moveLocate } ) {
 
     const [isInput, setIsInput] = useState([false,false]);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const userIdRef = useRef(null);
     const userPasswordRef = useRef(null);
 
 
-    const userLoginRequest = (e) => {
+    const userLoginRequest = async (e) => {
         e.preventDefault(); 
-        userLogin(userIdRef.current.value, userPasswordRef.current.value);
+
+        const userId = userIdRef.current.value;
+        const userPassword = userPasswordRef.current.value;
+
+        if(userId.length < 3) {setErrorMessage("아이디는 4글자 이상이여야 합니다."); return}
+        if(userPassword.length < 7) {setErrorMessage("비밀번호는 8글자 이상이여야 합니다."); return}
+
+        const result = await userLogin(
+            userId,
+            userPassword
+        );
+
+        if(result.success) {
+            moveLocate("lobby")
+        }
+        else{
+            setErrorMessage(result.error);
+        }
     }
 
   return (
@@ -38,6 +56,9 @@ function Login( { moveLocate } ) {
                                 ref={userPasswordRef}
                             />
                             <p>PassWord</p>
+                        </div>
+                        <div className="ErrorMessage">
+                            {errorMessage}
                         </div>
                         <div className='InputBox' style={{ marginTop: '30px' }}>
                             <button className='loginButton' type='submit'>로그인</button>

@@ -21,13 +21,21 @@ function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setCo
                     </div> 
                 )}
                 
+                {locate === "lobby" ? (
+                    <div className='headerButton' onClick={() => moveLocate("draw")}>
+                        <span></span>
+                        <p>Draw</p>
+                    </div>
+                ) : (
+                    <div className='headerButton' onClick={() => moveLocate("lobby")}>
+                        <span></span>
+                        <p>Lobby</p>
+                    </div>
+                )}
                 
                 {locate !== "draw" ? (
                     <>
-                        <div className='headerButton' onClick={() => moveLocate("draw")}>
-                            <span></span>
-                            <p>Draw</p>
-                        </div>
+                        
                         <div className='headerButton'  onClick={() => moveLocate("login")}>
                             <span></span>
                             <p>Login</p>
@@ -43,10 +51,7 @@ function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setCo
                     </>
                 ) : (
                     <>
-                        <div className='headerButton' onClick={() => moveLocate("lobby")}>
-                            <span></span>
-                            <p>Lobby</p>
-                        </div>
+                        
                         <div className='headerButton'>
                             <span></span>
                             <p>Save</p>

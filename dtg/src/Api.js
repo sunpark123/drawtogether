@@ -10,6 +10,22 @@ const api = axios.create({
   
 });
 
+export const userSessionCheck = async () => {
+    try{
+        const response = await api.get('/userSessionCheck');
+        
+        return {
+            success: true,
+            userId: response.data
+        }
+		
+    } catch (error) {
+        return {success: false}
+    }
+    
+}
+
+
 export const userLogin = async ( userId, userPassword ) => {
 	try {
 		await api.post('/login', {
@@ -21,7 +37,23 @@ export const userLogin = async ( userId, userPassword ) => {
 	} catch (error) {
 		return {
 			success: false,
-			body: error
+			error: error.response?.data || error.message
+		}
+	}
+};
+export const userRegister = async ( userId, userPassword, userName ) => {
+	try {
+		await api.post('/register', {
+			userId: userId,
+			userPassword: userPassword,
+			userName: userName
+		});
+		return { success: true }
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
 		}
 	}
 };
