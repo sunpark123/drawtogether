@@ -4,7 +4,7 @@ import { SketchPicker } from 'react-color';
 import { userSessionCheck } from '../Api';
 
 
-function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setColor, saveHistoryRequest, resetHistoryRequest} ) {
+function Header( { userId, locate, moveLocate, tool, setTool, size, setSize, color, setColor, saveHistoryRequest, resetHistoryRequest} ) {
     const [headerLeft, setHeaderLeft] = useState(0);
     const [colorSeleterOpen, setColorSeleterOpen] = useState(false);
     const colorPicker = useRef();
@@ -28,15 +28,6 @@ function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setCo
     }, [colorSeleterOpen]);
 
 
-    useEffect(() => {
-        if(isLogined) return;
-        (async () => {
-            const { success, userId } = await userSessionCheck();
-            if (success) {
-                setIsLogined(true);
-            }
-        })();
-    }, []);
 
 	return (
 		<>
@@ -61,8 +52,8 @@ function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setCo
                 
                 {locate !== "draw" ? (
                     <>
-                        {isLogined ? (
-                            <div className='headerButton'  onClick={() => moveLocate("login")}>
+                        {userId !== null ? (
+                            <div className='headerButton'  onClick={() => moveLocate("profile")}>
                                 <span></span>
                                 <p>Profile</p>
                             </div>

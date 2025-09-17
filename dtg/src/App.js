@@ -6,6 +6,7 @@ import Lobby from "./Lobby/Lobby";
 import Login from "./Login/Login";
 import Register from "./Login/Register"
 import { saveDrawHistory, userSessionCheck } from "./Api";
+import Profile from "./Profile/Profile";
 
 
 
@@ -37,14 +38,27 @@ function AppContent() {
 	const [needHistory, setNeedHistory] = useState(false);
 	const [history, setHistory] = useState([]);
 
+	const [userId, setUserId] = useState(null);
+
+
+	const getUserId = () => {
+		if(userId === null){
+			(async () => {
+				const { success, userId } = await userSessionCheck();
+				if (success) {
+					setUserId(userId);
+					return userId;
+				}
+			})();
+		}
+		else{
+			return userId;
+		}
+	}
+
 	const saveHistory = (his) => {
 		setHistory(his);
-		(async () => {
-			const { success, userId } = await userSessionCheck();
-			if (success) {
-				saveDrawHistory(userId, his);
-			}
-		})();
+		saveDrawHistory(getUserId(), his);
 		setNeedHistory(false);
 	}
 
@@ -59,6 +73,7 @@ function AppContent() {
 	return (
 		<>
 			<Header 
+				userId={getUserId()}
 				locate={locate} 
 				moveLocate={moveLocate} 
 				tool={tool}
@@ -76,6 +91,7 @@ function AppContent() {
 					<Route path="/draw" element={<Lobby/>} />
 					<Route path="/login" element={<Login moveLocate={moveLocate}/>}/>
 					<Route path="/register" element={<Register moveLocate={moveLocate}/>}/>
+					<Route path="/profile" element={<Profile />}/>
 				</Routes>
 			</DrawContext.Provider>
 
