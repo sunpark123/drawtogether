@@ -43,7 +43,10 @@ function Register( { moveLocate } ) {
 
   return (
         <>
-            <div className="Login">
+            <div className="Login" style={{
+				backgroundImage: `url('/background.jpg')`,
+				backgroundAttachment: 'fixed'
+			}}>
                 <form onSubmit={userRegisterRequest}>
                     <div className='LoginBox'>
                         <div className={`InputBox ${isInput[0] ? "isInput" : ""}`}>

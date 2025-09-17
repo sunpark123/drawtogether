@@ -1,4 +1,6 @@
 import axios from 'axios';
+import pako from 'pako';
+
 
 const API_BASE_URL = 'http://localhost:1111/'; 
 const api = axios.create({
@@ -57,3 +59,50 @@ export const userRegister = async ( userId, userPassword, userName ) => {
 		}
 	}
 };
+
+export const saveDrawHistory = async ( userId, drawHistory ) => {
+	try {
+		const jsonStr = JSON.stringify(drawHistory);
+		const compressed = pako.gzip(jsonStr);
+
+		const compressedBase64 = btoa(String.fromCharCode(...compressed));
+		
+		await api.post('/saveHistory', {
+			userId: userId,
+			drawHistory: compressedBase64,
+		});
+		return { success: true }
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+export const getDrawHistory = async ( userId ) => {
+	try {
+		const result = await api.get('/getHistory', {
+			params: { userId }
+		});
+
+		const binarys = atob(result.data.drawHistory);
+		const compresseds = new Uint8Array(binarys.split("").map(c => c.charCodeAt(0)));
+
+		const jsonStrs = pako.ungzip(compresseds, { to: "string" });
+		const data = JSON.parse(jsonStrs);
+		return { 
+			success: true,
+			drawHistory: data
+		}
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+
+
+// 불러와서 압축 해제 

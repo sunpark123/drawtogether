@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './Lobby.css';
 import Draw from '../Draw/Draw';
-function Lobby( {locate, tool, size, color} ) {
+function Lobby( {locate, tool, size, color, saveHistory, needHistory} ) {
 
 	const [lobbyTextX, setLobbyTextX] = useState(150);
 
@@ -11,10 +11,7 @@ function Lobby( {locate, tool, size, color} ) {
 	}, [locate])
 	return (
 		<>
-			<div className='lobby' style={{
-				backgroundImage: `url('/background.jpg')`,
-				backgroundAttachment: 'fixed'
-			}}>
+			<div className='lobby'>
 				<div className='textBox' style={{ left:`${lobbyTextX}%`, top:`${lobbyTextX}%`}}>
 					<span>D</span><span>r</span><span>a</span><span>w</span> <br></br>
 					<span id='spanT'>T</span><span>o</span> <br></br>
@@ -23,7 +20,7 @@ function Lobby( {locate, tool, size, color} ) {
 				</div>
 				
 			</div>
-			{lobbyTextX === 150 && <Draw tool={tool} size={size} color={color}/>}
+			{lobbyTextX === 150 && <Draw tool={tool} size={size} color={color} saveHistory={saveHistory} needHistory={needHistory}/>}
 			
 		</>
 	);

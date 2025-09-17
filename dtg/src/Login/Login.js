@@ -34,7 +34,7 @@ function Login( { moveLocate } ) {
 
   return (
         <>
-            <div className="Login">
+            <div className="Login" >
                 <form onSubmit={userLoginRequest}>
                     <div className='LoginBox'>
                         <div className={`InputBox ${isInput[0] ? "isInput" : ""}`}>

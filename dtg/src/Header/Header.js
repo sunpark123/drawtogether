@@ -1,17 +1,43 @@
 import { useEffect, useRef, useState } from 'react';
 import './Header.css';
 import { SketchPicker } from 'react-color';
+import { userSessionCheck } from '../Api';
 
-function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setColor} ) {
+
+function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setColor, saveHistoryRequest, resetHistoryRequest} ) {
     const [headerLeft, setHeaderLeft] = useState(0);
     const [colorSeleterOpen, setColorSeleterOpen] = useState(false);
     const colorPicker = useRef();
-
+    const colorPickerWrapper = useRef();
+    const [isLogined, setIsLogined] = useState(false);
     useEffect(() => {
         setHeaderLeft((locate === "lobby") ? 0 : -300);
     }, [locate])
     
-  
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (colorSeleterOpen && colorPickerWrapper.current && !colorPickerWrapper.current.contains(e.target)) {
+                setColorSeleterOpen(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [colorSeleterOpen]);
+
+
+    useEffect(() => {
+        if(isLogined) return;
+        (async () => {
+            const { success, userId } = await userSessionCheck();
+            if (success) {
+                setIsLogined(true);
+            }
+        })();
+    }, []);
+
 	return (
 		<>
             <div className='header' style={{left:`${headerLeft}px`}}>
@@ -35,11 +61,18 @@ function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setCo
                 
                 {locate !== "draw" ? (
                     <>
+                        {isLogined ? (
+                            <div className='headerButton'  onClick={() => moveLocate("login")}>
+                                <span></span>
+                                <p>Profile</p>
+                            </div>
+                        ) : (
+                            <div className='headerButton'  onClick={() => moveLocate("login")}>
+                                <span></span>
+                                <p>Login</p>
+                            </div>
+                        )}
                         
-                        <div className='headerButton'  onClick={() => moveLocate("login")}>
-                            <span></span>
-                            <p>Login</p>
-                        </div>
                         <div className='headerButton'>
                             <span></span>
                             <p>Other</p>
@@ -52,11 +85,11 @@ function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setCo
                 ) : (
                     <>
                         
-                        <div className='headerButton'>
+                        <div className='headerButton' onClick={() => saveHistoryRequest()}>
                             <span></span>
                             <p>Save</p>
                         </div>
-                        <div className='headerButton'>
+                        <div className='headerButton' onClick={() => resetHistoryRequest()}>
                             <span></span>
                             <p>Reset</p>
                         </div>
@@ -102,9 +135,12 @@ function Header( {locate, moveLocate, tool, setTool, size, setSize, color, setCo
                 </div>
                 
             </div>
-            <div className='colorSeleter' style={{ 
-                display: colorSeleterOpen ? "block" : "none",
-             }}>
+            <div
+                ref={colorPickerWrapper}
+                className='colorSeleter' 
+                style={{ 
+                    display: colorSeleterOpen ? "block" : "none",
+                }}>
                 <SketchPicker 
                     ref={colorPicker}
                     color={color}

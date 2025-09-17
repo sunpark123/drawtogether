@@ -1,17 +1,40 @@
 import Cursor from './Cursor';
 import './Draw.css'
-import React, { useRef, useEffect, useState } from "react";
+import { DrawContext } from "../App";
+import React, { useRef, useEffect, useState, useContext  } from "react";
+import { getDrawHistory, userSessionCheck } from '../Api';
 
 
-function Draw( {tool = "pen", size = 5, color = "black"} ) {
+function Draw() {
+    const { tool, size, color, saveHistory, needHistory, loadHistory=[] } = useContext(DrawContext);
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
 
-    const [history, setHistory] = useState([]);
+    const [history, setHistory] = useState(loadHistory);
     const [undoHistory, setUndoHistory] = useState([]);
     const [currentStroke, setCurrentStroke] = useState(null);
 
 
+    useEffect(() => {
+        (async () => {
+            const { success, userId } = await userSessionCheck();
+            if (success) {
+                const { drawHistory } = await getDrawHistory(userId);
+                setHistory(drawHistory);
+            }
+        })();
+    }, []);
+
+    // draw 불러오기
+
+    useEffect(() => {
+        if(needHistory) {
+            saveHistory(history);
+        }
+    }, [needHistory])
+
+  
+    
     useEffect(() => {
         const canvas = canvasRef.current;
         canvas.width = window.innerWidth; 
@@ -75,7 +98,6 @@ function Draw( {tool = "pen", size = 5, color = "black"} ) {
         
         let dx = e.nativeEvent.offsetX;
         let dy = e.nativeEvent.offsetY
-        console.log(tool);
         setCurrentStroke({ tool: tool, color: color, size: size, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
         
     };
@@ -135,12 +157,7 @@ function Draw( {tool = "pen", size = 5, color = "black"} ) {
 
 	return (
 		<>
-            <div className="draw"
-                style={{
-                    backgroundImage: `url('/background.jpg')`,
-                    backgroundAttachment: 'fixed',
-                }}
-            >
+            <div className="draw">
                 <canvas
                     ref={canvasRef}
                     onMouseDown={startDrawing}

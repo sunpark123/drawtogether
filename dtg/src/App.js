@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useState, createContext, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 
 import Header from "./Header/Header";
 import Lobby from "./Lobby/Lobby";
 import Login from "./Login/Login";
 import Register from "./Login/Register"
+import { saveDrawHistory, userSessionCheck } from "./Api";
+
+
+
 function App() {
+	
   return (
 		<Router>
 			<AppContent />
@@ -15,6 +20,8 @@ function App() {
 
 // 여기서 useNavigate를 사용
 function AppContent() {
+	
+		
 	const navigate = useNavigate();
 	const [locate, setLocate] = useState("lobby");
 	
@@ -27,6 +34,27 @@ function AppContent() {
 	const [size, setSize] = useState(5);
 	const [color, setColor] = useState("#000000");
 
+	const [needHistory, setNeedHistory] = useState(false);
+	const [history, setHistory] = useState([]);
+
+	const saveHistory = (his) => {
+		setHistory(his);
+		(async () => {
+			const { success, userId } = await userSessionCheck();
+			if (success) {
+				saveDrawHistory(userId, his);
+			}
+		})();
+		setNeedHistory(false);
+	}
+
+	const saveHistoryRequest = () => {
+		setNeedHistory(true);
+	}
+
+	const resetHistoryRequest = () => {
+		//reset
+	}
 
 	return (
 		<>
@@ -39,16 +67,21 @@ function AppContent() {
 				setSize={setSize}
 				color={color}
 				setColor={setColor}
+				saveHistoryRequest={saveHistoryRequest}
+				resetHistoryRequest={resetHistoryRequest}
 			/>
+			<DrawContext.Provider value={{ tool, size, color: color.hex, saveHistory, needHistory, loadHistory:history }}>
+				<Routes>
+					<Route path="*" element={<Lobby locate={locate}/>} />
+					<Route path="/draw" element={<Lobby/>} />
+					<Route path="/login" element={<Login moveLocate={moveLocate}/>}/>
+					<Route path="/register" element={<Register moveLocate={moveLocate}/>}/>
+				</Routes>
+			</DrawContext.Provider>
 
-			<Routes>
-				<Route path="*" element={<Lobby locate={locate}/>} />
-				<Route path="/draw" element={<Lobby tool={tool} size={size} color={color.hex}/>} />
-				<Route path="/login" element={<Login moveLocate={moveLocate}/>}/>
-				<Route path="/register" element={<Register moveLocate={moveLocate}/>}/>
-			</Routes>
 		</>
 	);
 }
 
+export const DrawContext = createContext(null);
 export default App;
