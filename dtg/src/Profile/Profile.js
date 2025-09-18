@@ -1,16 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import './Profile.css';
-import { userSessionCheck } from '../Api';
+import { changeUserName, getUserName, getUserProfileImage, saveUserProfileImage, userSessionCheck } from '../Api';
 import Cursor from '../Draw/Cursor';
 
-function Profile( {  } ) {
+function Profile( {moveLocate} ) {
 
     const [isInput, setIsInput] = useState([true]);
     const [errorMessage, setErrorMessage] = useState("");
 
     const [openDrawProfileImage, setOpenDrawProfileImage] = useState(false);
 
+    const [userProfileImageURL, setUserProfileImageURL] = useState('/basicProfileImage.png')
+
     const [userId, setUserId] = useState("");
+    const [userName, setUserName] = useState("");
     const userNameRef = useRef();
 
     useEffect(() => {
@@ -18,16 +21,31 @@ function Profile( {  } ) {
             const { success, userId } = await userSessionCheck();
             if (success) {
                 setUserId(userId);
-            }
+
+                const { success: imgSuccess, userProfileImage } = await getUserProfileImage(userId);
+                if (imgSuccess) setUserProfileImageURL(userProfileImage);
+
+                const { success: nameSuccess, userName } = await getUserName(userId);
+                if (nameSuccess) setUserName(userName);
+                
+            } else { moveLocate("lobby") }
         })();
     }, []);
 
     const userProfileEditRequest = async (e) => {
         e.preventDefault(); 
 
-        const userName = userNameRef.current.value;
+        const changedUserName = userNameRef.current.value;
 
-        if(userName.length < 1) {setErrorMessage("이름은 2글자 이상이여야 합니다."); return}
+        if(changedUserName.length < 1) {setErrorMessage("이름은 2글자 이상이여야 합니다."); return}
+
+        (async () => {
+            const { success, userId } = await userSessionCheck();
+            if (success) {
+                changeUserName(userId, changedUserName);
+                moveLocate("lobby")
+            }
+        })();
     }
 
     const canvasRef = useRef(null);
@@ -36,13 +54,15 @@ function Profile( {  } ) {
     const [history, setHistory] = useState([]);
     const [currentStroke, setCurrentStroke] = useState(null);
 
-
+    
+ 
    
-
+    //캔버스
     useEffect(() => {
         reDrawCanvas();
     }, [history, currentStroke]);
-    
+
+
     const startDrawing = (e) => {
         setDrawing(true);
         
@@ -69,7 +89,8 @@ function Profile( {  } ) {
 
     const reDrawCanvas = () => {
         const ctx = canvasRef.current.getContext("2d");
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.fillStyle = "white"; 
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
         const drawStroke = (drawInfo) => {
             if(drawInfo === null) return;
@@ -103,20 +124,48 @@ function Profile( {  } ) {
         if (currentStroke) drawStroke(currentStroke); 
     };
 
+
+    //커서
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const handleMove = (e) => {
+            if (e.target.classList.contains("drawCanvas")) {
+                setVisible(true);
+            } else {
+                setVisible(false);
+            }
+        };
+
+        window.addEventListener("mousemove", handleMove);
+        return () => window.removeEventListener("mousemove", handleMove);
+    }, []);
+
+
+    //캔버스 저장
+    const saveCanvasImage = () => {
+        const canvas = canvasRef.current;
+        const dataURL = canvas.toDataURL("image/png");
+        setUserProfileImageURL(dataURL);
+
+
+        saveUserProfileImage(dataURL);
+    }
+
     return (
         <>
             <div className="Login" >
                 <form onSubmit={userProfileEditRequest}>
                     <div className='LoginBox'>
-                        <button className='ProfileImage'>
-                            <img src='/basicProfileImage.png' onClick={() => setOpenDrawProfileImage(!openDrawProfileImage)}/>
+                        <button className='ProfileImage' type='button'>
+                            <img src={userProfileImageURL} onClick={() => setOpenDrawProfileImage(!openDrawProfileImage)}/>
                         </button>
                         <div className='line'></div>
                         <div className={`InputBox ${isInput[0] ? "isInput" : ""}`}>
                             <input
-                                value={userId}
+                                value={userName}
                                 onChange={(e) => {
-                                    setUserId(e.target.value);
+                                    setUserName(e.target.value);
                                     setIsInput((prev) => {
                                         const newState = [...prev];
                                         newState[0] = e.target.value !== "";
@@ -140,6 +189,7 @@ function Profile( {  } ) {
                     <p>프로필 이미지 그리기</p>
                     <div className='drawProfileImage'>
                         <canvas
+                            className='drawCanvas'
                             width={200}
                             height={200}
                             style={{
@@ -153,17 +203,18 @@ function Profile( {  } ) {
                             onMouseUp={stopDrawing}
                         >
                         </canvas>
-                        <Cursor size={5}/>
+                        
                     </div>
                     <div className='drawProfileImageButton'>
-                        <button className='edit' onClick={() => setOpenDrawProfileImage(false)}>완료</button>
-                        <button className='close' onClick={() => {
+                        <button className='edit' type='button' onClick={() => {saveCanvasImage(); setOpenDrawProfileImage(false)}}>완료</button>
+                        <button className='close' type='button' onClick={() => {
                             setHistory([]);
                             setOpenDrawProfileImage(false);
-                        }}>닫기</button>
+                        }}>닫기(Reset)</button>
                     </div>
                 </div>
             </div>
+            {visible && <Cursor size={5}/>}
         </>
 	);
 }

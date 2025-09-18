@@ -1,15 +1,25 @@
 import { useState, useEffect } from "react";
 
-function Cursor( {size} ) {
+function Cursor( { size } ) {
     const [pos, setPos] = useState({ x: 0, y: 0 });
     const [cursorSize, setCursorSize] = useState(50);
     const [penCursorImagePath] = useState("cursor.png")
 
     useEffect(() => {
-        const handleMove = (e) => setPos({ x: e.clientX, y: e.clientY });
+        const handleMove = (e) => {
+            setPos({ x: e.clientX, y: e.clientY });
+         
+          
+        };
+
         window.addEventListener("mousemove", handleMove);
+
+        
+
         return () => window.removeEventListener("mousemove", handleMove);
     }, []);
+
+
     return (
         <div
             style={{

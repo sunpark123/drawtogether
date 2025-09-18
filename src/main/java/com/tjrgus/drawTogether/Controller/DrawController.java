@@ -24,7 +24,7 @@ public class DrawController {
 
 
     @PostMapping("/saveHistory")
-    private ResponseEntity<?> saveHistory(@RequestBody DrawEntity drawEntity){
+    public ResponseEntity<?> saveHistory(@RequestBody DrawEntity drawEntity){
         if(drawService.drawAlready(drawEntity)){
             drawService.updateDraw(drawEntity);
         }
@@ -35,7 +35,7 @@ public class DrawController {
     }
 
     @GetMapping("/getHistory")
-    private ResponseEntity<?> getHistory(@RequestParam String userId){
+    public ResponseEntity<?> getHistory(@RequestParam String userId){
         DrawEntity draw = drawService.getDrawHistory(userId);
         if(draw != null){
             return ResponseEntity.ok().body(draw);

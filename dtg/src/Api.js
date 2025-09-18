@@ -2,7 +2,7 @@ import axios from 'axios';
 import pako from 'pako';
 
 
-const API_BASE_URL = 'http://localhost:1111/'; 
+const API_BASE_URL = 'http://localhost:1112/'; 
 const api = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
@@ -13,19 +13,20 @@ const api = axios.create({
 });
 
 export const userSessionCheck = async () => {
-    try{
+    try {
         const response = await api.get('/userSessionCheck');
+        const data = response.data;
+		return { 
+			success: data.success, 
+			userId: data.userId 
+		};
         
-        return {
-            success: true,
-            userId: response.data
-        }
 		
     } catch (error) {
-        return {success: false}
+        return { success: false };
     }
-    
-}
+};
+
 
 
 export const userLogin = async ( userId, userPassword ) => {
@@ -104,5 +105,83 @@ export const getDrawHistory = async ( userId ) => {
 	}
 };
 
+export const saveUserProfileImage = async ( profileImage ) => {
+	try {
+		const res = await fetch(profileImage);
+        const blob = await res.blob();
+		const formData = new FormData();
 
-// 불러와서 압축 해제 
+		formData.append("userImage", blob);
+
+		await api.post("/saveUserProfileImage", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+		return { success: true }
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+
+export const getUserProfileImage = async ( userId ) => {
+	try {
+		const result = await api.get('/getUserProfileImage', {
+			params: { userId }
+		});
+		
+		return { 
+			success: true,
+			userProfileImage: result.data
+		}
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+
+
+export const getUserName = async ( userId ) => {
+	try {
+		const result = await api.get('/getUserName', {
+			params: { userId }
+		});
+		
+		return { 
+			success: true,
+			userName: result.data
+		}
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+
+export const changeUserName = async ( userId, userName ) => {
+	try {
+		const result = await api.post('/changeUserName', {
+			userId: userId,
+			userName: userName
+		});
+		
+		return { 
+			success: true,
+		}
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};

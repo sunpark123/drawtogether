@@ -52,15 +52,15 @@ function Header( { userId, locate, moveLocate, tool, setTool, size, setSize, col
                 
                 {locate !== "draw" ? (
                     <>
-                        {userId !== null ? (
-                            <div className='headerButton'  onClick={() => moveLocate("profile")}>
-                                <span></span>
-                                <p>Profile</p>
-                            </div>
-                        ) : (
+                        {userId === null || userId === undefined ? (
                             <div className='headerButton'  onClick={() => moveLocate("login")}>
                                 <span></span>
                                 <p>Login</p>
+                            </div>
+                        ) : (
+                            <div className='headerButton'  onClick={() => moveLocate("profile")}>
+                                <span></span>
+                                <p>Profile</p>
                             </div>
                         )}
                         

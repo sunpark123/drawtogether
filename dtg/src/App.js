@@ -91,7 +91,7 @@ function AppContent() {
 					<Route path="/draw" element={<Lobby/>} />
 					<Route path="/login" element={<Login moveLocate={moveLocate}/>}/>
 					<Route path="/register" element={<Register moveLocate={moveLocate}/>}/>
-					<Route path="/profile" element={<Profile />}/>
+					<Route path="/profile" element={<Profile moveLocate={moveLocate}/>}/>
 				</Routes>
 			</DrawContext.Provider>
 

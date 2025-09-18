@@ -2,6 +2,7 @@ package com.tjrgus.drawTogether.Service;
 
 import com.tjrgus.drawTogether.Entity.UserEntity;
 import com.tjrgus.drawTogether.Repository.UserRepository;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,4 +31,17 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
+
+    public String getUserName(String userId) {
+        Optional<UserEntity> userEntity = userRepository.findByUserId(userId);
+        return userEntity.map(UserEntity::getUserName).orElse(null);
+    }
+
+    public void changeUserName(String userId, String userName){
+        Optional<UserEntity> userEntity = userRepository.findByUserId(userId);
+        if(userEntity.isPresent()){
+            userEntity.get().setUserName(userName);
+            userRepository.save(userEntity.get());
+        }
+    }
 }
