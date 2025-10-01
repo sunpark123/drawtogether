@@ -1,4 +1,4 @@
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext } from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 
 import Header from "./Header/Header";
@@ -7,7 +7,7 @@ import Login from "./Login/Login";
 import Register from "./Login/Register"
 import { saveDrawHistory, userSessionCheck } from "./Api";
 import Profile from "./Profile/Profile";
-
+import WebsoTest from "./WebsoTest";
 
 
 function App() {
@@ -36,7 +36,6 @@ function AppContent() {
 	const [color, setColor] = useState("#000000");
 
 	const [needHistory, setNeedHistory] = useState(false);
-	const [history, setHistory] = useState([]);
 
 	const [userId, setUserId] = useState(null);
 
@@ -57,7 +56,6 @@ function AppContent() {
 	}
 
 	const saveHistory = (his) => {
-		setHistory(his);
 		saveDrawHistory(getUserId(), his);
 		setNeedHistory(false);
 	}
@@ -85,13 +83,14 @@ function AppContent() {
 				saveHistoryRequest={saveHistoryRequest}
 				resetHistoryRequest={resetHistoryRequest}
 			/>
-			<DrawContext.Provider value={{ tool, size, color: color.hex, saveHistory, needHistory, loadHistory:history }}>
+			<DrawContext.Provider value={{ tool, size, color: color.hex, saveHistory, needHistory }}>
 				<Routes>
 					<Route path="*" element={<Lobby locate={locate}/>} />
 					<Route path="/draw" element={<Lobby/>} />
 					<Route path="/login" element={<Login moveLocate={moveLocate}/>}/>
 					<Route path="/register" element={<Register moveLocate={moveLocate}/>}/>
 					<Route path="/profile" element={<Profile moveLocate={moveLocate}/>}/>
+					<Route path="/wt" element={<WebsoTest/>}/>
 				</Routes>
 			</DrawContext.Provider>
 

@@ -1,17 +1,17 @@
 import Cursor from './Cursor';
 import './Draw.css'
 import { DrawContext } from "../App";
-import React, { useRef, useEffect, useState, useContext  } from "react";
+import React, { useRef, useEffect, useState, useContext, useCallback } from "react";
 import { getDrawHistory, userSessionCheck } from '../Api';
 
 
 function Draw() {
-    const { tool, size, color, saveHistory, needHistory, loadHistory=[] } = useContext(DrawContext);
+    const { tool, size, color, saveHistory, needHistory } = useContext(DrawContext);
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
 
-    const [history, setHistory] = useState(loadHistory);
-    const [undoHistory, setUndoHistory] = useState([]);
+    const [history, setHistory] = useState([]);
+    const [, setUndoHistory] = useState([]);
     const [currentStroke, setCurrentStroke] = useState(null);
 
 
@@ -19,9 +19,12 @@ function Draw() {
         (async () => {
             const { success, userId } = await userSessionCheck();
             if (success) {
-                const { drawHistory } = await getDrawHistory(userId);
-                setHistory(drawHistory);
+                const { success, drawHistory } = await getDrawHistory(userId);
+                if(success) {setHistory(drawHistory);}
+                else {setHistory([]);}
+                
             }
+            
         })();
     }, []);
 
@@ -31,7 +34,7 @@ function Draw() {
         if(needHistory) {
             saveHistory(history);
         }
-    }, [needHistory])
+    }, [needHistory, saveHistory, history])
 
   
     
@@ -65,9 +68,7 @@ function Draw() {
         }
     }, []);
 
-    useEffect(() => {
-        reDrawCanvas();
-    }, [history, currentStroke]);
+    
 
     const drawUndo = () => {
         setHistory(prev => {
@@ -117,7 +118,7 @@ function Draw() {
         setCurrentStroke(null);
     }
 
-    const reDrawCanvas = () => {
+    const reDrawCanvas = useCallback(() => {
         const ctx = canvasRef.current.getContext("2d");
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -148,12 +149,13 @@ function Draw() {
             });
             ctx.stroke();
         };
-
         history.forEach(drawInfo => {drawStroke(drawInfo)});
         if (currentStroke) drawStroke(currentStroke); 
-    };
+    }, [history, currentStroke]);
 
-    
+    useEffect(() => {
+        reDrawCanvas();
+    }, [reDrawCanvas]);
 
 	return (
 		<>

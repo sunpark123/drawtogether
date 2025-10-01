@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import './Header.css';
 import { SketchPicker } from 'react-color';
-import { userSessionCheck } from '../Api';
 
 
 function Header( { userId, locate, moveLocate, tool, setTool, size, setSize, color, setColor, saveHistoryRequest, resetHistoryRequest} ) {
@@ -9,7 +8,7 @@ function Header( { userId, locate, moveLocate, tool, setTool, size, setSize, col
     const [colorSeleterOpen, setColorSeleterOpen] = useState(false);
     const colorPicker = useRef();
     const colorPickerWrapper = useRef();
-    const [isLogined, setIsLogined] = useState(false);
+    
     useEffect(() => {
         setHeaderLeft((locate === "lobby") ? 0 : -300);
     }, [locate])

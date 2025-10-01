@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback  } from 'react';
 import './Profile.css';
 import { changeUserName, getUserName, getUserProfileImage, saveUserProfileImage, userSessionCheck } from '../Api';
 import Cursor from '../Draw/Cursor';
@@ -12,7 +12,7 @@ function Profile( {moveLocate} ) {
 
     const [userProfileImageURL, setUserProfileImageURL] = useState('/basicProfileImage.png')
 
-    const [userId, setUserId] = useState("");
+    // const [userId, setUserId] = useState("");
     const [userName, setUserName] = useState("");
     const userNameRef = useRef();
 
@@ -20,7 +20,7 @@ function Profile( {moveLocate} ) {
         (async () => {
             const { success, userId } = await userSessionCheck();
             if (success) {
-                setUserId(userId);
+                // setUserId(userId);
 
                 const { success: imgSuccess, userProfileImage } = await getUserProfileImage(userId);
                 if (imgSuccess) setUserProfileImageURL(userProfileImage);
@@ -30,7 +30,7 @@ function Profile( {moveLocate} ) {
                 
             } else { moveLocate("lobby") }
         })();
-    }, []);
+    }, [moveLocate]);
 
     const userProfileEditRequest = async (e) => {
         e.preventDefault(); 
@@ -58,9 +58,7 @@ function Profile( {moveLocate} ) {
  
    
     //캔버스
-    useEffect(() => {
-        reDrawCanvas();
-    }, [history, currentStroke]);
+
 
 
     const startDrawing = (e) => {
@@ -87,7 +85,7 @@ function Profile( {moveLocate} ) {
         setCurrentStroke(null);
     }
 
-    const reDrawCanvas = () => {
+    const reDrawCanvas = useCallback(() => {
         const ctx = canvasRef.current.getContext("2d");
         ctx.fillStyle = "white"; 
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -122,8 +120,11 @@ function Profile( {moveLocate} ) {
 
         history.forEach(drawInfo => {drawStroke(drawInfo)});
         if (currentStroke) drawStroke(currentStroke); 
-    };
+    }, [history, currentStroke]);
 
+    useEffect(() => {
+        reDrawCanvas();
+    }, [reDrawCanvas]);
 
     //커서
     const [visible, setVisible] = useState(false);
@@ -158,7 +159,7 @@ function Profile( {moveLocate} ) {
                 <form onSubmit={userProfileEditRequest}>
                     <div className='LoginBox'>
                         <button className='ProfileImage' type='button'>
-                            <img src={userProfileImageURL} onClick={() => setOpenDrawProfileImage(!openDrawProfileImage)}/>
+                            <img src={userProfileImageURL} onClick={() => setOpenDrawProfileImage(!openDrawProfileImage)} alt='profileImage'/>
                         </button>
                         <div className='line'></div>
                         <div className={`InputBox ${isInput[0] ? "isInput" : ""}`}>
