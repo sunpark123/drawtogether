@@ -7,7 +7,7 @@ function Lobby( {locate} ) {
 
 	useEffect(() => {
 		if(locate === "lobby") setLobbyTextX(50);
-		if(locate === "draw") setLobbyTextX(150);
+		else setLobbyTextX(150);
 	}, [locate])
 	return (
 		<>

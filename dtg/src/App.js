@@ -28,6 +28,7 @@ function AppContent() {
 	
 	const moveLocate = (loc) => {
 		navigate("/" + loc);
+		console.log(loc);
 		setLocate(loc);
 	};
 	const moveLocateWithOutMoveLocate = (loc) => {
@@ -89,6 +90,7 @@ function AppContent() {
 			<DrawContext.Provider value={{ tool, size, color: color.hex, saveHistory, needHistory }}>
 				<Routes>
 					<Route path="*" element={<Lobby locate={locate}/>} />
+					<Route path="/lobby" element={<Lobby locate={locate}/>} />
 					<Route path="/draw" element={<Lobby/>} />
 					<Route path="/login" element={<Login moveLocate={moveLocate}/>}/>
 					<Route path="/register" element={<Register moveLocate={moveLocate}/>}/>

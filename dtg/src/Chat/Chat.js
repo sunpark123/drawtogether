@@ -5,8 +5,6 @@ function Chat( {send, messages} ) {
     
 	const inputRef = useRef();
 	
-	console.log(messages);
-
 	const sendChat = (e) => {
 		e.preventDefault(); 
 		send(inputRef.current.value);

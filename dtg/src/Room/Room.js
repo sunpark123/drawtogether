@@ -10,13 +10,11 @@ function Room( {moveLocate} ) {
     const [messages, setMessages] = useState([]);
 
     const { sendMessage } = useWebSocket((msg) => {
-        console.log(messages);
 		setMessages((prev) => [...prev, JSON.parse(msg)]);
 	}, roomId);
 
 	const send = (msg) => {
 		if (msg.trim()) {
-            console.log(msg);
 			sendMessage(msg);
 		}
 	};

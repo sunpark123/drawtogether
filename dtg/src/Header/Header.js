@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import './Header.css';
 import { SketchPicker } from 'react-color';
-
+import { v4 as uuidv4 } from 'uuid';
 
 function Header( { userId, locate, moveLocate, tool, setTool, size, setSize, color, setColor, saveHistoryRequest, resetHistoryRequest} ) {
     const [headerLeft, setHeaderLeft] = useState(0);
@@ -65,7 +65,7 @@ function Header( { userId, locate, moveLocate, tool, setTool, size, setSize, col
                         <span></span>
                         <p>Reset</p>
                     </div>
-                    <div className='headerButton'>
+                    <div className='headerButton' onClick={() => moveLocate("room/" + uuidv4())}>
                         <span></span>
                         <p>Invite</p>
                     </div>

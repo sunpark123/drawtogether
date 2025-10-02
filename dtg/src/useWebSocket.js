@@ -10,16 +10,16 @@ const useWebSocket = (onMessageReceived, roomId) => {
 		const client = new Client({
 			brokerURL: "ws://localhost:1112/ws-stomp",
 			connectHeaders: {},
-			debug: (str) => {
-				console.log(str);
-			},
+			// debug: (str) => {
+			// 	console.log(str);
+			// },
+			//디버깅
 			reconnectDelay: 5000,
 			heartbeatIncoming: 4000,
 			heartbeatOutgoing: 4000,
 			webSocketFactory: () => new SockJS("http://localhost:1112/ws-stomp"),
 			onConnect: () => {
 				console.log("Connected to WebSocket + " + roomId);
-
 				// 구독
 				client.subscribe("/server/" + roomId, (message) => {
 					if (onMessageReceived) {
@@ -52,6 +52,9 @@ const useWebSocket = (onMessageReceived, roomId) => {
 
 			});
 		}
+	};
+	const disconnect = () => {
+		stompClient.current?.deactivate();
 	};
 
   	return { sendMessage };
