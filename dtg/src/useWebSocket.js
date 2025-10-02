@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 
-const useWebSocket = (onMessageReceived, userId) => {
+const useWebSocket = (onMessageReceived, roomId) => {
   const stompClient = useRef(null);
 
 	useEffect(() => {
@@ -18,10 +18,10 @@ const useWebSocket = (onMessageReceived, userId) => {
 			heartbeatOutgoing: 4000,
 			webSocketFactory: () => new SockJS("http://localhost:1112/ws-stomp"),
 			onConnect: () => {
-				console.log("Connected to WebSocket + " + userId);
+				console.log("Connected to WebSocket + " + roomId);
 
 				// 구독
-				client.subscribe("/server/" + userId, (message) => {
+				client.subscribe("/server/" + roomId, (message) => {
 					if (onMessageReceived) {
 						onMessageReceived(message.body);
 					}
@@ -37,12 +37,20 @@ const useWebSocket = (onMessageReceived, userId) => {
 				stompClient.current.deactivate();
 			}
 		};
-	}, [onMessageReceived, userId]);
+	}, [onMessageReceived, roomId]);
 
 
 	const sendMessage = (msg) => {
 		if (stompClient.current && stompClient.current.connected) {
-			stompClient.current.publish({ destination: "/app/chat/tjrgus", body: msg });
+			stompClient.current.publish({ 
+				destination: "/app/chat/" + roomId,
+
+				body: JSON.stringify({
+					userId: "tjrgus",
+					message: msg
+				})
+
+			});
 		}
 	};
 

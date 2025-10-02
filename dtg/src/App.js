@@ -7,7 +7,7 @@ import Login from "./Login/Login";
 import Register from "./Login/Register"
 import { saveDrawHistory, userSessionCheck } from "./Api";
 import Profile from "./Profile/Profile";
-import WebsoTest from "./WebsoTest";
+import Room from "./Room/Room";
 
 
 function App() {
@@ -28,6 +28,9 @@ function AppContent() {
 	
 	const moveLocate = (loc) => {
 		navigate("/" + loc);
+		setLocate(loc);
+	};
+	const moveLocateWithOutMoveLocate = (loc) => {
 		setLocate(loc);
 	};
 
@@ -90,7 +93,7 @@ function AppContent() {
 					<Route path="/login" element={<Login moveLocate={moveLocate}/>}/>
 					<Route path="/register" element={<Register moveLocate={moveLocate}/>}/>
 					<Route path="/profile" element={<Profile moveLocate={moveLocate}/>}/>
-					<Route path="/wt" element={<WebsoTest/>}/>
+					<Route path="/room/:roomId" element={<Room moveLocate={moveLocateWithOutMoveLocate}/>}/>
 				</Routes>
 			</DrawContext.Provider>
 
