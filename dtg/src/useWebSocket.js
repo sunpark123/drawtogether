@@ -1,9 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
+import { DrawContext } from "./App";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 
 const useWebSocket = (onMessageReceived, roomId) => {
-  const stompClient = useRef(null);
+  	const stompClient = useRef(null);
+	const { userId } = useContext(DrawContext);
 
 	useEffect(() => {
 		// Stomp 클라이언트 생성
@@ -46,10 +48,22 @@ const useWebSocket = (onMessageReceived, roomId) => {
 				destination: "/app/chat/" + roomId,
 
 				body: JSON.stringify({
-					userId: "tjrgus",
+					userId: userId,
 					message: msg
 				})
 
+			});
+		}
+	};
+	const sendDrawHistory = (draw) => {
+		if (stompClient.current && stompClient.current.connected) {
+			const message = {
+				userId: userId,
+				drawList: draw
+			};
+			stompClient.current.publish({
+				destination: `/app/draw/${roomId}`,
+				body: JSON.stringify(message)
 			});
 		}
 	};
@@ -57,7 +71,7 @@ const useWebSocket = (onMessageReceived, roomId) => {
 		stompClient.current?.deactivate();
 	};
 
-  	return { sendMessage };
+  	return { sendMessage, sendDrawHistory };
 };
 
 export default useWebSocket;

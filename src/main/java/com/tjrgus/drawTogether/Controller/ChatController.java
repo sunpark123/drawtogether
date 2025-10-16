@@ -1,7 +1,9 @@
 package com.tjrgus.drawTogether.Controller;
 
 import com.tjrgus.drawTogether.DTO.ChatMessageDTO;
+import com.tjrgus.drawTogether.DTO.DrawMessageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -9,6 +11,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,4 +31,11 @@ public class ChatController {
         System.out.println(roomId + " : " + chatMessageDTO.getUserId() + " / " + chatMessageDTO.getMessage());
         messagingTemplate.convertAndSend("/server/" + roomId, chatMessageDTO);
     }
+
+    @MessageMapping("/draw/{roomId}")
+    public void sendDraw(@Payload DrawMessageDTO drawMessageDTO, @DestinationVariable String roomId) {
+        System.out.println(drawMessageDTO.getDrawList());
+        messagingTemplate.convertAndSend("/server/" + roomId, drawMessageDTO);
+    }
+
 }

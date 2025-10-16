@@ -5,7 +5,7 @@ import React, { useRef, useEffect, useState, useContext, useCallback } from "rea
 import { getDrawHistory, userSessionCheck } from '../Api';
 
 
-function Draw() {
+function Draw( { sendDraw = null, addHistory = null } ) {
     const { tool, size, color, saveHistory, needHistory } = useContext(DrawContext);
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
@@ -14,6 +14,11 @@ function Draw() {
     const [, setUndoHistory] = useState([]);
     const [currentStroke, setCurrentStroke] = useState(null);
 
+    useEffect(() => {
+        if (!addHistory) return;
+
+        setHistory(h => [...h, addHistory]);
+    }, [addHistory])
 
     useEffect(() => {
         (async () => {
@@ -115,6 +120,7 @@ function Draw() {
     const stopDrawing = () => {
         setDrawing(false);
         setHistory(h => [...h, currentStroke]);
+        if(sendDraw) {sendDraw(currentStroke);}
         setCurrentStroke(null);
     }
 

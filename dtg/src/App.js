@@ -87,7 +87,7 @@ function AppContent() {
 				saveHistoryRequest={saveHistoryRequest}
 				resetHistoryRequest={resetHistoryRequest}
 			/>
-			<DrawContext.Provider value={{ tool, size, color: color.hex, saveHistory, needHistory }}>
+			<DrawContext.Provider value={{ tool, size, color: color.hex ?? "#000000", saveHistory, needHistory, userId }}>
 				<Routes>
 					<Route path="*" element={<Lobby locate={locate}/>} />
 					<Route path="/lobby" element={<Lobby locate={locate}/>} />
