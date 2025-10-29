@@ -59,7 +59,7 @@ function Login( ) {
 				</div>
                 <div className='loginBox'>
                     <div className='type'>
-                        <p>DrawToGether</p>
+                        <p>Sign in</p>
                     </div>
                     <div className='loginInput'>
                         <form method='post' onSubmit={loginRequest}>
