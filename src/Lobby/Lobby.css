@@ -12,23 +12,87 @@ body, #root{
     font-style: normal;
 }
 .lobby{
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+ 
     flex: 1;
     height: 100%;
     position: relative;
+    .menuBox{
+        position: absolute;
+        top: 50%;
+        left: 70%;
+        transform: translate(-50%,-50%);
+        transition: all 0.2s;
+        width: 500px;
+        height: 500px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+        .menu{
+            font-family: 'SchoolSafetyRoundedSmile';
+            margin: 10px;
+            cursor: pointer;
+            animation: zeroToBack 1s;
+            width: 220px;
+            height: 220px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            float: left;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            transition: all 0.2s cubic-bezier(.25,.8,.25,1);
+            
+            display: flex;
+            flex-direction: column;
+            justify-items: center;
+            align-items: center;
+            
+            img{
+                -webkit-user-drag: none;
+                -khtml-user-drag: none;
+                -moz-user-drag: none;
+                -o-user-drag: none;
+                width: 70px;
+                height:70px;
+                margin-top: 20px;
+                margin-bottom: 13px;
+            }
+            h1, p{
+                color:black;
+            }
+            p{margin-top: 0px; font-size: larger;}
+        }
+        .menu:hover{
+            background-color: rgba(255, 255, 255, 0.452);
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        }
+       
+    }
+   
     .textBox{
         font-family: 'Ownglyph_ParkDaHyun';
         position: absolute;
         width: max-content;
         height: max-content;
         top: 50%;
-        left: 50%;
+        left:30%;
         z-index: 100;
         transform: translate(-50%,-50%);
+        animation: textBoxMidToRight 1s;
         transition: 1s ease-in-out;
         span {
             display: inline-block;
             animation: shake 5s infinite;
-            font-size: 130px;
+            font-size: 120px;
         }
         span#spanT{
             margin-left: 40px;
@@ -57,5 +121,4 @@ body, #root{
     90% { transform: translate(-2px, 1px) rotate(0deg); }
     100% { transform: translate(0, 0) rotate(0deg); }
 }
-
 

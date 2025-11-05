@@ -1,11 +1,14 @@
-import { useState, useEffect, useRef, useImperativeHandle } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './Register.css';
 import { saveUserProfileImage, userRegister, userSessionCheck } from '../Api';
-import { data, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
+import { l } from '../language';
+import LanguageSetter from '../LanguageSetter/LanguageSetter';
+
 
 function Register( ) {
-
+    
     const [reloadKey, setReloadKey] = useState(0);
     const [, setUserProfileImageURL] = useState('/basicProfileImage.png')
     
@@ -45,10 +48,10 @@ function Register( ) {
         const userName = userNameRef.current.value;
         const userPassword = userPasswordRef.current.value;
 
-        if(userId.includes("_")) {setErrorMessage("아이디에 언더바 사용 금지."); return}
-        if(userId.length < 3) {setErrorMessage("아이디는 4글자 이상이여야 합니다."); return}
-        if(userName.length < 1) {setErrorMessage("이름은 2글자 이상이여야 합니다."); return}
-        if(userPassword.length < 7) {setErrorMessage("비밀번호는 8글자 이상이여야 합니다."); return}
+        if(userId.includes("_")) {setErrorMessage(l("errorMessage_id_short")); return}
+        if(userId.length < 3) {setErrorMessage(l("errorMessage_id_short")); return}
+        if(userName.length < 1) {setErrorMessage(l("errorMessage_name_short")); return}
+        if(userPassword.length < 7) {setErrorMessage(l("errorMessage_password_short")); return}
 
         const result = await userRegister(userId, userPassword, userName);
 
@@ -73,6 +76,7 @@ function Register( ) {
 
     return (
         <>
+            <LanguageSetter />
             <div className="Login">
                 <div className='textBox' style={{left: `${left}%`}}>
 					<span>D</span><span>r</span><span>a</span><span>w</span> <br></br>
@@ -82,16 +86,16 @@ function Register( ) {
 				</div>
                 <div className='registerBox'>
                     <div className='type'>
-                        <p style={{whiteSpace: 'nowrap'}}>Create Account</p>
+                        <p style={{whiteSpace: 'nowrap'}}>{l("form_type_register")}</p>
                     </div>
                     <div className='loginInput'>
                         <form method='post' onSubmit={registerRequest}>
                             <div className='drawInfo'>
                                 <div className='semo'></div>
-                                <p>프로필 그리기</p>
+                                <p>{l("register_text_profile_draw")}</p>
                             </div>
                             <div className='reDraw' onClick={() => setReloadKey(prev => prev + 1)}>
-                                <p>다시하기</p>
+                                <p>{l("register_text_profile_re_draw")}</p>
                             </div>
                             <Canvas
                                 key={reloadKey}
@@ -102,27 +106,27 @@ function Register( ) {
                             />
                             <div className='Input'>
                                 <input placeholder=" " required type='text' ref={userNameRef}></input>
-                                <p>User Name</p>
+                                <p>{l("input_name")}</p>
                             </div>
                             <div className='Input'>
                                 <input placeholder=" " required type='text' ref={userIdRef}></input>
-                                <p>UserId</p>
+                                <p>{l("input_userId")}</p>
                             </div>
                             <div className='Input'>
                                 <input placeholder=" " required type='password' ref={userPasswordRef}></input>
-                                <p>PassWord</p>
+                                <p>{l("input_userPassword")}</p>
                             </div>
                             
                             <div className='Error'>
                                 <p>{errorMesage}</p>
                             </div>
                             <div className='Submit'>
-                                <button type='submit'>회원가입</button>
+                                <button type='submit'>{l("register_button")}</button>
                             </div>
                         </form>
                         <div className='Register'>
-                            <a href='/login'>Sign in</a>
-                            <p>Already have an account?</p>
+                            <a href='/login'>{l("or_login_button")}</a>
+                            <p>{l("or_login_text")}</p>
                         </div>
 
                     
