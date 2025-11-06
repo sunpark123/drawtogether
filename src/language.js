@@ -42,7 +42,7 @@ const translations = {
         menu_join: "코드입력",
 
         menu_info_draw: "너의 생각을 보여줘!!",
-        menu_info_profile: "글로 너를 표현해봐",
+        menu_info_profile: "그림으로 너를 표현해봐",
         menu_info_other: "다른 방 입장하기",
         menu_info_join: "코드로 입장하기",
 
@@ -87,7 +87,7 @@ const translations = {
         menu_join: "Join",
         
         menu_info_draw: "Draw Your Thoughts!!",
-        menu_info_profile: "Express Myself In Writing",
+        menu_info_profile: "Express Myself In Draw",
         menu_info_other: "Join Other Room",
         menu_info_join: "Join With Code",
 
