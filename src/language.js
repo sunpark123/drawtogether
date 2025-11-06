@@ -46,10 +46,18 @@ const translations = {
         menu_info_other: "다른 방 입장하기",
         menu_info_join: "코드로 입장하기",
 
+        menu_room_solo: "혼자하기",
+        menu_room_info_solo: "혼자 열심히 그려요",
+        menu_room_multi: "같이하기",
+        menu_room_info_multi: "다함께 재밌게 그려요",
+
+
         profile_image_draw: "그리기",
         profile_image_not_draw: "그리기 취소",
 
         logout_message: "로그아웃",
+
+
     },
     eng: {
         errorMessage_id_short: "ID must be at least 4 characters long.",
@@ -90,6 +98,12 @@ const translations = {
         menu_info_profile: "Express Myself In Draw",
         menu_info_other: "Join Other Room",
         menu_info_join: "Join With Code",
+
+        menu_room_solo: "Solo",
+        menu_room_info_solo: "I draw hard alone",
+        menu_room_multi: "Together",
+        menu_room_info_multi: "Let's drawing together",
+
 
         profile_image_draw: "draw",
         profile_image_not_draw: "draw cancle",

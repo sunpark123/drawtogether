@@ -4,6 +4,7 @@ import { l } from '../language';
 import LanguageSetter from '../LanguageSetter/LanguageSetter';
 import { userSessionCheck } from '../Api';
 import { useNavigate } from 'react-router-dom';
+import LobbyDrawSelect from './LobbyDrawSelect';
 
 
 function Lobby( ) {
@@ -37,6 +38,9 @@ function Lobby( ) {
 	};
 
 	const resetStyle = (n) => setStyle({number:n, transform: "perspective(350px) rotateX(0deg) rotateY(0deg)", trastransition: `all 3s`, background: `rgba(255, 255, 255, 0.8)` });
+
+
+	const [openRoomSelect, setOpenDrawSelect] = useState(false);
 	return (
 		<>
 			<LanguageSetter />
@@ -49,9 +53,9 @@ function Lobby( ) {
 				</div>
 				<div className='menuBox'>
 					<div className='menuWrap'>
-						<div className="menu" onMouseMove={(e) => handleMouseMove(1, e)}  onMouseLeave={() => resetStyle(1)} style={{
+						<div className="menu" onClick={() => setOpenDrawSelect(true)} onMouseMove={(e) => handleMouseMove(1, e)}  onMouseLeave={() => resetStyle(1)} style={{
 							transform: (style.number === 1) ? style.transform : 'none',
-							background: (style.number === 1) ? style.background : 'rgba(255, 255, 255, 0.075);'
+							background: (style.number === 1) ? style.background : 'rgba(255, 255, 255, 0.8)'
 						}}>
 							<img src="menu_1.png" alt="gameIcon"></img>
 							<h1>{l("menu_draw")}</h1>
@@ -59,7 +63,7 @@ function Lobby( ) {
 						</div>
 						<div className="menu" onClick={() => {navigate("/profile")}} onMouseMove={(e) => handleMouseMove(2, e)}  onMouseLeave={() => resetStyle(2)} style={{
 							transform: (style.number === 2) ? style.transform : 'none',
-							background: (style.number === 2) ? style.background : 'rgba(255, 255, 255, 0);'
+							background: (style.number === 2) ? style.background : 'rgba(255, 255, 255, 0.8)'
 						}}>
 							<img src="menu_2.png" alt="gameIcon"></img>
 							<h1>{l("menu_profile")}</h1>
@@ -69,7 +73,7 @@ function Lobby( ) {
 					<div className='menuWrap'>
 						<div className="menu" onMouseMove={(e) => handleMouseMove(3, e)}  onMouseLeave={() => resetStyle(3)} style={{
 							transform: (style.number === 3) ? style.transform : 'none',
-							background: (style.number === 3) ? style.background : 'rgba(255, 255, 255, 0.075);'
+							background: (style.number === 3) ? style.background : 'rgba(255, 255, 255, 0.8)'
 						}}>
 							<img src="menu_3.png" alt="gameIcon"></img>
 							<h1>{l("menu_other")}</h1>
@@ -77,7 +81,7 @@ function Lobby( ) {
 						</div>
 						<div className="menu" onMouseMove={(e) => handleMouseMove(4, e)}  onMouseLeave={() => resetStyle(4)} style={{
 							transform: (style.number === 4) ? style.transform : 'none',
-							background: (style.number === 4) ? style.background : 'rgba(255, 255, 255, 0);'
+							background: (style.number === 4) ? style.background : 'rgba(255, 255, 255, 0.8)'
 						}}>
 							<img src="menu_4.png" alt="gameIcon"></img>
 							<h1>{l("menu_join")}</h1>
@@ -85,6 +89,7 @@ function Lobby( ) {
 						</div>
 					</div>
 				</div>
+				{openRoomSelect && (<LobbyDrawSelect setClose={setOpenDrawSelect}/>)}
 			</div>
 		</>
 	);

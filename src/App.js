@@ -6,6 +6,7 @@ import Register from "./Register/Register";
 import Profile from "./Profile/Profile";
 import Lobby from "./Lobby/Lobby";
 import Logout from "./Login/Logined";
+import Draw from "./Draw/Draw";
 
 
 function App() {
@@ -28,6 +29,7 @@ function AppContent() {
 				<Route path="/register" element={<Register />} />
 				<Route path="/profile" element={<Profile/>} />
 				<Route path="/lobby" element={<Lobby/>} />
+				<Route path="/draw" element={<Draw/>} />
 			</Routes>
 		</>
 	);

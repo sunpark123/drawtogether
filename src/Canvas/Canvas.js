@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef, useCallback, useImperativeHandle  } from 'react';
 
 
-function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref }) {
+function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref, background=true, border=true }) {
 
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
 
     const [history, setHistory] = useState([]);
+    const [, setUndoHistory] = useState([]);
     const [currentStroke, setCurrentStroke] = useState(null);
 
     useImperativeHandle(ref, () => canvasRef.current);
@@ -37,9 +38,17 @@ function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref 
 
     const reDrawCanvas = useCallback(() => {
         const ctx = canvasRef.current.getContext("2d");
-        ctx.fillStyle = "white"; 
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        if(background) {
+            ctx.fillStyle = "white"; 
+            ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        }
+        else {
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        }
 
+        
+
+        
         const drawStroke = (drawInfo) => {
             if(drawInfo === null) return;
             
@@ -71,25 +80,70 @@ function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref 
         history.forEach(drawInfo => {drawStroke(drawInfo)});
         if (currentStroke) drawStroke(currentStroke); 
         
-    }, [history, currentStroke]);
+    }, [history, currentStroke, background]);
+    
     useEffect(() => {
         if(!returnHistory) return;
         returnHistory(history);
-    }, [history])
+    }, [history, returnHistory])
+
     useEffect(() => {
         reDrawCanvas();
     }, [reDrawCanvas]);
 
 
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if ((event.ctrlKey || event.metaKey) && event.code === "KeyZ") {
+                event.preventDefault();
+                drawUndo();
+            }
+            if ((event.ctrlKey || event.metaKey) && event.code === "KeyY") {
+                event.preventDefault();
+                drawRedo();
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        }
+    }, []);
+    const drawUndo = () => {
+        setHistory(prev => {
+            if (prev.length === 0) return prev; 
+
+            const newHistory = [...prev]; 
+
+            const last = newHistory.pop();
+            setUndoHistory(pr => [...pr, last]);
+
+            return newHistory;
+        });
+    }
+    const drawRedo = () => {
+        setUndoHistory(prev => {
+            if (prev.length === 0) return prev;
+            
+            const newHistory = [...prev];
+            
+            const last = newHistory.pop();
+            setHistory(h => [...h, last]);
+
+            return newHistory;
+        })
+    }
     return (
         <canvas
             className='drawCanvas'
             width={width}
             height={height}
             style={{
+                backgroundColor: 'transparent',
                 width: width,
                 height: height,
-                borderRadius: borderRadius
+                borderRadius: borderRadius,
+                border: border ? "1px solid black" : "none"
             }}
             ref={canvasRef}
             onMouseDown={startDrawing}
