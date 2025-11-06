@@ -1,11 +1,11 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 
 import Header from "./Header/Header";
 import Lobby from "./Lobby/Lobby";
 import Login from "./Login/Login";
 import Register from "./Login/Register"
-import { saveDrawHistory, userSessionCheck } from "./Api";
+import { saveDrawHistory, userSessionCheck, getUserName } from "./Api";
 import Profile from "./Profile/Profile";
 import Room from "./Room/Room";
 
@@ -40,8 +40,11 @@ function AppContent() {
 	const [color, setColor] = useState("#000000");
 
 	const [needHistory, setNeedHistory] = useState(false);
+	const [loadHistroy, setLoadHistroy] = useState(false);
+	const [resetHistroy, setResetHistroy] = useState(false);
 
 	const [userId, setUserId] = useState(null);
+	const [userName, setUserName] = useState(null);
 
 
 	const getUserId = () => {
@@ -58,7 +61,21 @@ function AppContent() {
 			return userId;
 		}
 	}
-
+	const getUserNames = () => {
+		if(userName === null){
+			(async () => {
+				const { success, userName } = await getUserName(getUserId());
+				if (success) {
+					setUserName(userName);
+					return userName;
+				}
+			})();
+		}
+		else{
+			return userName;
+		}
+	}
+	useEffect(() => getUserNames())
 	const saveHistory = (his) => {
 		saveDrawHistory(getUserId(), his);
 		setNeedHistory(false);
@@ -69,7 +86,16 @@ function AppContent() {
 	}
 
 	const resetHistoryRequest = () => {
-		//reset
+		setResetHistroy(true);
+	}
+	const resetedHistory = () => {
+		setResetHistroy(false);
+	}
+	const loadHistoryRequest = () => {
+		setLoadHistroy(true);
+	}
+	const loadedHistory = () => {
+		setLoadHistroy(false);
 	}
 
 	return (
@@ -86,8 +112,9 @@ function AppContent() {
 				setColor={setColor}
 				saveHistoryRequest={saveHistoryRequest}
 				resetHistoryRequest={resetHistoryRequest}
+				loadHistoryRequest={loadHistoryRequest}
 			/>
-			<DrawContext.Provider value={{ tool, size, color: color.hex ?? "#000000", saveHistory, needHistory, userId }}>
+			<DrawContext.Provider value={{ tool, size, color: color.hex ?? "#000000", saveHistory, needHistory, userId, loadHistroy, loadedHistory, resetHistroy, resetedHistory, userName }}>
 				<Routes>
 					<Route path="*" element={<Lobby locate={locate}/>} />
 					<Route path="/lobby" element={<Lobby locate={locate}/>} />

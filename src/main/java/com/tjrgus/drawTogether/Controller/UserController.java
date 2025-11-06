@@ -46,6 +46,20 @@ public class UserController {
 
     }
 
+    @GetMapping("/userLogout")
+    public ResponseEntity<?> userLogout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("로그인 안함");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Logout!");
+
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> UserLogin(@RequestBody UserEntity userEntity, HttpServletRequest request){
         if(userService.userAlready(userEntity)){
@@ -61,8 +75,10 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> UserRegister(@RequestBody UserEntity userEntity){
+    public ResponseEntity<?> UserRegister(@RequestBody UserEntity userEntity, HttpServletRequest request){
         if(!userService.userIdAlready(userEntity)){
+            HttpSession session = request.getSession();
+            session.setAttribute("userId", userEntity.getUserId());
             userService.saveUser((userEntity));
             return ResponseEntity.ok().body("OK");
         }
@@ -138,8 +154,16 @@ public class UserController {
     }
 
     @PostMapping("/changeUserName")
-    public ResponseEntity<?> changeUserName(@RequestBody UserEntity user) {
-        userService.changeUserName(user.getUserId(), user.getUserName());
-        return ResponseEntity.ok().body("OK");
+    public ResponseEntity<?> changeUserName(@RequestBody UserEntity user, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            String userId = session.getAttribute("userId").toString();
+            userService.changeUserName(userId, user.getUserName());
+            return ResponseEntity.ok().body("OK");
+        }
+        else{
+            return ResponseEntity.status(400).body("세션없음");
+        }
+
     }
 }

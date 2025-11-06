@@ -189,21 +189,7 @@ function Profile( {moveLocate} ) {
                 <div className='drawProfileImageBox' style={{ display: (openDrawProfileImage ? "block" : "none")}}>
                     <p>프로필 이미지 그리기</p>
                     <div className='drawProfileImage'>
-                        <canvas
-                            className='drawCanvas'
-                            width={200}
-                            height={200}
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                borderRadius: "100%"
-                            }}
-                            ref={canvasRef}
-                            onMouseDown={startDrawing}
-                            onMouseMove={draw}
-                            onMouseUp={stopDrawing}
-                        >
-                        </canvas>
+                        
                         
                     </div>
                     <div className='drawProfileImageButton'>

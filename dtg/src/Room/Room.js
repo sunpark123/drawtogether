@@ -12,7 +12,10 @@ function Room( {moveLocate} ) {
 
     const [messages, setMessages] = useState([]);
 	const [addHistory, setAddHistory] = useState(null);
-    const { sendMessage, sendDrawHistory } = useWebSocket((msg) => {
+
+	const [joinMessageSend, setJoinMeesageSend] = useState(false);
+
+    const { sendMessage, sendDrawHistory, joinMessage } = useWebSocket((msg) => {
 		let json = JSON.parse(msg);
 		let code = json.code;
 		if(code === 0){ //메세지
@@ -23,9 +26,14 @@ function Room( {moveLocate} ) {
 				setAddHistory(json.drawList);
 			} 
 		}
+
+		
 		
 	}, roomId);
-
+	if(!joinMessageSend){
+		joinMessage();	
+		setJoinMeesageSend(true);
+	}
 	const send = (msg) => {
 		if (msg.trim()) {
 			sendMessage(msg);

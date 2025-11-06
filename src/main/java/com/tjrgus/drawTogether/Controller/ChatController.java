@@ -2,6 +2,7 @@ package com.tjrgus.drawTogether.Controller;
 
 import com.tjrgus.drawTogether.DTO.ChatMessageDTO;
 import com.tjrgus.drawTogether.DTO.DrawMessageDTO;
+import com.tjrgus.drawTogether.TempStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -18,6 +19,8 @@ import java.util.List;
 @Controller
 public class ChatController {
 
+    @Autowired
+    private TempStorage tempStorage;
 
     private final SimpMessagingTemplate messagingTemplate;
 
@@ -36,6 +39,10 @@ public class ChatController {
     public void sendDraw(@Payload DrawMessageDTO drawMessageDTO, @DestinationVariable String roomId) {
         System.out.println(drawMessageDTO.getDrawList());
         messagingTemplate.convertAndSend("/server/" + roomId, drawMessageDTO);
+
+
+        tempStorage.save(roomId, drawMessageDTO);
+        System.out.println(tempStorage.find((roomId)));
     }
 
 }

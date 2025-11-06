@@ -3,7 +3,7 @@ import './Header.css';
 import { SketchPicker } from 'react-color';
 import { v4 as uuidv4 } from 'uuid';
 
-function Header( { userId, locate, moveLocate, tool, setTool, size, setSize, color, setColor, saveHistoryRequest, resetHistoryRequest} ) {
+function Header( { userId, locate, moveLocate, tool, setTool, size, setSize, color, setColor, saveHistoryRequest, resetHistoryRequest, loadHistoryRequest} ) {
     const [headerLeft, setHeaderLeft] = useState(0);
     const [colorSeleterOpen, setColorSeleterOpen] = useState(false);
     const colorPicker = useRef();
@@ -61,6 +61,10 @@ function Header( { userId, locate, moveLocate, tool, setTool, size, setSize, col
                         <span></span>
                         <p>Save</p>
                     </div>
+                    <div className='headerButton' onClick={() => loadHistoryRequest()}>
+                        <span></span>
+                        <p>Load</p>
+                    </div>
                     <div className='headerButton' onClick={() => resetHistoryRequest()}>
                         <span></span>
                         <p>Reset</p>
@@ -100,18 +104,21 @@ function Header( { userId, locate, moveLocate, tool, setTool, size, setSize, col
                         <p>{headerLeft === 0 ? "X" : ">"}</p>
                     </div>
                 )}
-
-                {locate === "lobby" ? (
-                    <div className='headerButton' onClick={() => moveLocate("draw")}>
-                        <span></span>
-                        <p>Draw</p>
-                    </div>
-                ) : (
-                    <div className='headerButton' onClick={() => moveLocate("lobby")}>
-                        <span></span>
-                        <p>Lobby</p>
-                    </div>
+                {(userId !== null && userId !== undefined) && (
+                    locate === "lobby"  ? (
+                        <div className='headerButton' onClick={() => moveLocate("draw")}>
+                            <span></span>
+                            <p>Draw</p>
+                        </div>
+                        
+                    ) : (
+                        <div className='headerButton' onClick={() => moveLocate("lobby")}>
+                            <span></span>
+                            <p>Lobby</p>
+                        </div>
+                    )
                 )}
+                
 
                 {renderHeaderButtons()}
 

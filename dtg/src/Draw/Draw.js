@@ -5,32 +5,41 @@ import React, { useRef, useEffect, useState, useContext, useCallback } from "rea
 import { getDrawHistory, userSessionCheck } from '../Api';
 
 
-function Draw( { sendDraw = null, addHistory = null } ) {
-    const { tool, size, color, saveHistory, needHistory } = useContext(DrawContext);
+function Draw( { sendDraw = null, addHistory = null, RoomHistory = null } ) {
+    const { tool, size, color, saveHistory, needHistory, loadHistroy, loadedHistory, resetHistroy, resetedHistory} = useContext(DrawContext);
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
 
     const [history, setHistory] = useState([]);
+    const [otherHistory, setOtherHistory] = useState([]);
+    const [loadSavehistory, setLoadSavehistory] = useState([]);
     const [, setUndoHistory] = useState([]);
     const [currentStroke, setCurrentStroke] = useState(null);
 
     useEffect(() => {
         if (!addHistory) return;
 
-        setHistory(h => [...h, addHistory]);
+        setOtherHistory(h => [...h, addHistory]);
     }, [addHistory])
-
     useEffect(() => {
+        if (!RoomHistory) return;
+
+        setOtherHistory(RoomHistory);
+    }, [RoomHistory])
+    const loadBeforeHistory = () => {
         (async () => {
             const { success, userId } = await userSessionCheck();
             if (success) {
                 const { success, drawHistory } = await getDrawHistory(userId);
-                if(success) {setHistory(drawHistory);}
-                else {setHistory([]);}
+                if(success) {setLoadSavehistory(drawHistory);}
+                else {setLoadSavehistory([]);}
                 
             }
             
         })();
+    }
+    useEffect(() => {
+        loadBeforeHistory();
     }, []);
 
     // draw 불러오기
@@ -38,10 +47,23 @@ function Draw( { sendDraw = null, addHistory = null } ) {
     useEffect(() => {
         if(needHistory) {
             saveHistory(history);
+            loadBeforeHistory();
         }
     }, [needHistory, saveHistory, history])
 
-  
+    useEffect(() => {
+        if(loadHistroy){
+            loadedHistory();
+            setHistory(loadSavehistory);
+        }
+    }, [loadHistroy, loadedHistory, loadSavehistory])
+
+    useEffect(() => {
+        if(resetHistroy){
+            resetedHistory();
+            setHistory([]);
+        }
+    }, [resetHistroy, resetedHistory])
     
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -155,9 +177,13 @@ function Draw( { sendDraw = null, addHistory = null } ) {
             });
             ctx.stroke();
         };
+
         history.forEach(drawInfo => {drawStroke(drawInfo)});
+        otherHistory.forEach(drawInfo => {drawStroke(drawInfo)});
+
+
         if (currentStroke) drawStroke(currentStroke); 
-    }, [history, currentStroke]);
+    }, [history, currentStroke, otherHistory]);
 
     useEffect(() => {
         reDrawCanvas();

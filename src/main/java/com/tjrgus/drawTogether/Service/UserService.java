@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -26,6 +27,10 @@ public class UserService {
         return searchUser.filter(entity -> passwordEncoder.matches(userEntity.getUserPassword(), searchUser.get().getUserPassword())).isPresent();
     }
     public void saveUser(UserEntity userEntity){
+        if(userEntity.getUserPassword() == null) { // oAuth 로그인
+            String randomPwd = UUID.randomUUID().toString();
+            userEntity.setUserPassword(randomPwd);
+        }
         String encodedPassword = passwordEncoder.encode(userEntity.getUserPassword());
         userEntity.setUserPassword(encodedPassword);
         userRepository.save(userEntity);
