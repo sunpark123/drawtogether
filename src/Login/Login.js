@@ -13,7 +13,7 @@ function Login( ) {
 		(async () => {
 			const { success } = await userSessionCheck();
 			if (success) {
-				navigate("/logined");
+				navigate("/lobby");
 			}
 		})();
 	});
@@ -45,7 +45,7 @@ function Login( ) {
         const result = await userLogin(userId, userPassword);
 
         if(result.success) {
-            window.location.href = "/logined";
+            window.location.href = "/lobby";
         }
         else{
             setErrorMessage(result.error);

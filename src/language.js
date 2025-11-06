@@ -12,6 +12,7 @@ const translations = {
         // 로그인, 회원가입
         form_type_login: "로그인",
         form_type_register: "회원가입",
+        form_type_edit_profile: "프로필 수정",
 
         input_userId: "아이디",
         input_userPassword: "비밀번호",
@@ -19,6 +20,7 @@ const translations = {
 
         login_button: "로그인",
         register_button: "회원가입",
+        edit_profile_button: "프로필 수정",
 
         or_register_text: "DrawToGether가 처음인가요?",
         or_register_button: "계정 생성",
@@ -43,6 +45,11 @@ const translations = {
         menu_info_profile: "글로 너를 표현해봐",
         menu_info_other: "다른 방 입장하기",
         menu_info_join: "코드로 입장하기",
+
+        profile_image_draw: "그리기",
+        profile_image_not_draw: "그리기 취소",
+
+        logout_message: "로그아웃",
     },
     eng: {
         errorMessage_id_short: "ID must be at least 4 characters long.",
@@ -52,6 +59,7 @@ const translations = {
 
         form_type_login: "Sign In",
         form_type_register: "Create Account",
+        form_type_edit_profile: "Edit Profile",
 
         input_userId: "UserId",
         input_userPassword: "Password",
@@ -59,6 +67,7 @@ const translations = {
 
         login_button: "Login",
         register_button: "Register",
+        edit_profile_button: "Profile Edit",
 
         or_register_text: "New to DrawToGether?",
         or_register_button: "Create an Account",
@@ -81,6 +90,11 @@ const translations = {
         menu_info_profile: "Express Myself In Writing",
         menu_info_other: "Join Other Room",
         menu_info_join: "Join With Code",
+
+        profile_image_draw: "draw",
+        profile_image_not_draw: "draw cancle",
+
+        logout_message: "logout",
     },
 };
 

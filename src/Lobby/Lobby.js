@@ -1,16 +1,24 @@
-import { useState, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import './Lobby.css';
-import { DrawContext } from "../App";
 import { l } from '../language';
 import LanguageSetter from '../LanguageSetter/LanguageSetter';
+import { userSessionCheck } from '../Api';
+import { useNavigate } from 'react-router-dom';
 
 
 function Lobby( ) {
 	
-	
+	const navigate = useNavigate();
+	useEffect(() => {
+		(async () => {
+			const { success } = await userSessionCheck();
+			if (!success) {
+				navigate("/login");
+			}
+		})();
+	});
 	
 
-	const { userId } = useContext(DrawContext);
 	const [style, setStyle] = useState({});
 
 	const handleMouseMove = (number, e) => {
@@ -49,7 +57,7 @@ function Lobby( ) {
 							<h1>{l("menu_draw")}</h1>
 							<p>{l("menu_info_draw")}</p>
 						</div>
-						<div className="menu" onMouseMove={(e) => handleMouseMove(2, e)}  onMouseLeave={() => resetStyle(2)} style={{
+						<div className="menu" onClick={() => {navigate("/profile")}} onMouseMove={(e) => handleMouseMove(2, e)}  onMouseLeave={() => resetStyle(2)} style={{
 							transform: (style.number === 2) ? style.transform : 'none',
 							background: (style.number === 2) ? style.background : 'rgba(255, 255, 255, 0);'
 						}}>
@@ -78,7 +86,6 @@ function Lobby( ) {
 					</div>
 				</div>
 			</div>
-			{console.log(userId)}
 		</>
 	);
 }

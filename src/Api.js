@@ -181,10 +181,9 @@ export const getUserName = async ( userId ) => {
 	}
 };
 
-export const changeUserName = async ( userId, userName ) => {
+export const changeUserName = async (userName ) => {
 	try {
 		await api.post('/changeUserName', {
-			userId: userId,
 			userName: userName
 		});
 		
