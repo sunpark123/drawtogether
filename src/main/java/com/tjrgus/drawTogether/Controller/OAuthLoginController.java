@@ -22,10 +22,6 @@ public class OAuthLoginController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/test")
-    public String index() {
-        return "<a href='/oauth2/authorization/google'>Google 로그인asd</a>";
-    }
 
 
     @GetMapping("/oAuthLogin")
