@@ -224,7 +224,6 @@ body, #root{
     }
     .otherLogin{
         width: 100%;
-        height: 200px;
         float: left;
         padding-top: 22px;
         button{

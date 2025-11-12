@@ -48,7 +48,7 @@ body, #root{
     z-index: 100;
     transform: translate(-50%,-50%);
     transition: 1s ease-in-out;
-    animation: sizeSetRegister 1s;
+    animation: sizeSetProfile 1s;
     border-radius: 10px;
     outline: 1px solid lightgray;
     overflow: hidden;
@@ -288,7 +288,7 @@ Canvas{
 .reDraw:hover{
     outline: 1px solid gray;
 }
-@keyframes sizeSetRegister {
+@keyframes sizeSetProfile {
     0% {width: 100px; height: 100px;}
     50% { width: 500px; height: 100px;}
     100% {width: 500px; height: 490px;}

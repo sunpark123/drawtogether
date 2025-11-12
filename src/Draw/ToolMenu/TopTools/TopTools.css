@@ -1,0 +1,55 @@
+.TopTools{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100vw - 50px);
+    height: 50px;
+    z-index: 100;
+    background-color: lightgray;
+    border-bottom: 1px solid gray;
+    .tool{
+        max-height: 50px;
+        float: left;
+        img{
+            width: 50px;
+            height: 50px;
+            float: left;
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+        }
+        p{
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+        }
+        input{
+            height: 50px;
+            margin-right: 10px;
+        }
+        cursor: pointer;
+    }
+    #sizeP{
+        margin-left: 10px;
+        width: 100px;
+    }
+    #toolSizeI img{
+        width: 20px;
+        height: 20px;
+        margin: 15px;
+    }
+    .panel{
+        height: 50px;
+        width: 1px;
+        float: left;
+        margin: 0px 5px 0 5px;
+        border-right: 1px solid gray;
+    }
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none
+}
+
+*{margin: 0; padding: 0;}

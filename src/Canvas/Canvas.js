@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useImperativeHandle  } from 'react';
 
-
-function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref, background=true, border=true }) {
+function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref, background=true, border=true, tool = "pen", size = 5 }) {
 
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
@@ -17,7 +16,7 @@ function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref,
         
         let dx = e.nativeEvent.offsetX;
         let dy = e.nativeEvent.offsetY
-        setCurrentStroke({ tool: "pen", color: "black", size: 5, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
+        setCurrentStroke({ tool: tool, color: "black", size: size, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
         
     };
 
@@ -143,7 +142,7 @@ function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref,
                 width: width,
                 height: height,
                 borderRadius: borderRadius,
-                border: border ? "1px solid black" : "none"
+                border: border ? "1px solid black" : "none",
             }}
             ref={canvasRef}
             onMouseDown={startDrawing}
