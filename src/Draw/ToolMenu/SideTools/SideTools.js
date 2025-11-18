@@ -15,6 +15,9 @@ function SideTools( {setToolRequest} ){
                 <div className='tool' onClick={() => setTool("eraser")}>
                     <img src='basicProfileImage.png' alt='tool/eraser'></img>
                 </div>
+                <div className='tool' onClick={() => setTool("line")}>
+                    <img src='basicProfileImage.png' alt='tool/eraser'></img>
+                </div>
             </div>
         </>
     );  

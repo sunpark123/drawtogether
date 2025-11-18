@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import Canvas from '../Canvas/Canvas';
 import SideTools from './ToolMenu/SideTools/SideTools';
-import Cursor from './Cursor';
 import TopTools from './ToolMenu/TopTools/TopTools';
+import Cursor from '../Canvas/Cursor';
 
 function Draw () {
     const [windowSize, setWindowSize] = useState({
@@ -23,7 +23,7 @@ function Draw () {
     }, []);
     //canvas 리 사이징
 
-    const [cursorEnable, setCusorEnable] = useState(true);
+    const [cursorEnable, setCusorEnable] = useState(false);
 
     //
     const [tool, setTool] = useState("pen");

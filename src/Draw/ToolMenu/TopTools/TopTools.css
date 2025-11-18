@@ -52,4 +52,6 @@
     user-select:none
 }
 
-*{margin: 0; padding: 0;}
+.TopTools *{
+    margin: 0; padding: 0;
+}

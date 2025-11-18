@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useImperativeHandle  } from 'react';
 
-function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref, background=true, border=true, tool = "pen", size = 5 }) {
+function Canvas( {width=200, height=200, borderRadius, ref, background=true, border=true, tool = "pen", size = 5, onMouseMove, onMouseLeave }) {
 
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
@@ -10,14 +10,19 @@ function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref,
     const [currentStroke, setCurrentStroke] = useState(null);
 
     useImperativeHandle(ref, () => canvasRef.current);
+    
+    const [line, setLine] = useState()
+
 
     const startDrawing = (e) => {
         setDrawing(true);
         
         let dx = e.nativeEvent.offsetX;
         let dy = e.nativeEvent.offsetY
-        setCurrentStroke({ tool: tool, color: "black", size: size, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
-        
+
+        if(tool === "line") setLine([{sx: dx, sy: dy}, {ex: dx+1, ey: dy+1}]);
+
+        if(tool === "pen" || tool === "eraser") setCurrentStroke({ tool: tool, color: "black", size: size, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
     };
 
     const draw = (e) => {
@@ -26,15 +31,17 @@ function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref,
         let dx = e.nativeEvent.offsetX;
         let dy = e.nativeEvent.offsetY
         
-        setCurrentStroke(s => ({ ...s, path: [...s.path, { x: dx, y: dy }] }));
-    };
 
+        if(tool === "line") setLine(([start, end]) => [start, { ex: dx, ey: dy }]);
+
+        if(tool === "pen" || tool === "eraser") setCurrentStroke(s => ({ ...s, path: [...s.path, { x: dx, y: dy }] }));
+    };
     const stopDrawing = () => {
         setDrawing(false);
         setHistory(h => [...h, currentStroke]);
         setCurrentStroke(null);
+        console.log(line);
     }
-
     const reDrawCanvas = useCallback(() => {
         const ctx = canvasRef.current.getContext("2d");
         if(background) {
@@ -82,15 +89,8 @@ function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref,
     }, [history, currentStroke, background]);
     
     useEffect(() => {
-        if(!returnHistory) return;
-        returnHistory(history);
-    }, [history, returnHistory])
-
-    useEffect(() => {
         reDrawCanvas();
     }, [reDrawCanvas]);
-
-
     useEffect(() => {
         const handleKeyDown = (event) => {
             if ((event.ctrlKey || event.metaKey) && event.code === "KeyZ") {
@@ -132,6 +132,11 @@ function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref,
             return newHistory;
         })
     }
+
+
+
+   
+
     return (
         <canvas
             className='drawCanvas'
@@ -143,11 +148,13 @@ function Canvas( { returnHistory=null, width=200, height=200, borderRadius, ref,
                 height: height,
                 borderRadius: borderRadius,
                 border: border ? "1px solid black" : "none",
+                cursor: "none",
             }}
             ref={canvasRef}
             onMouseDown={startDrawing}
-            onMouseMove={draw}
+            onMouseMove={(e) => {draw(e); onMouseMove();}}
             onMouseUp={stopDrawing}
+            onMouseLeave={() => onMouseLeave()}
         >
         </canvas>
     )

@@ -5,6 +5,7 @@ import { changeUserName, getUserName, getUserProfileImage, saveUserProfileImage,
 import { useEffect, useRef, useState } from 'react';
 import Canvas from '../Canvas/Canvas';
 import { useNavigate } from 'react-router-dom';
+import Cursor from '../Canvas/Cursor';
 
 
 function Profile( ) {
@@ -69,9 +70,12 @@ function Profile( ) {
         saveUserProfileImage(dataURL);
     }
     const [profileImageEnable, setProfileImageEnable] = useState("profile_image_draw"); // profile_image_draw == true
+
+    const [cursorEnable, setCusorEnable] = useState(false);
 	return (
 		<>
 			<LanguageSetter />
+            {cursorEnable && (<Cursor size={5} />)}
 			<div className="Profile">
                 <div className='textBox' style={{left:'30%', top:"50%"}} id='textBox_smallSize'>
 					<span>D</span><span>r</span><span>a</span><span>w</span> <br></br>
@@ -104,7 +108,10 @@ function Profile( ) {
                                 height={200} 
                                 borderRadius={100} 
                                 ref={canvasRef}
+                                onMouseMove={() => setCusorEnable(true)}
+                                onMouseLeave={() => setCusorEnable(false)}
                             />
+                            
                             <div className='Input'>
                                 <input placeholder=" " required type='text' ref={userNameRef}></input>
                                 <p>{l("input_name")}</p>

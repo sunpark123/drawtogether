@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
 import { l } from '../language';
 import LanguageSetter from '../LanguageSetter/LanguageSetter';
+import Cursor from '../Canvas/Cursor';
 
 
 function Register( ) {
@@ -72,11 +73,11 @@ function Register( ) {
         saveUserProfileImage(dataURL);
     }
     
-
-
+    const [cursorEnable, setCusorEnable] = useState(false);
     return (
         <>
             <LanguageSetter />
+            {cursorEnable && (<Cursor size={5} />)}
             <div className="Login">
                 <div className='textBox' style={{left: `${left}%`}}>
 					<span>D</span><span>r</span><span>a</span><span>w</span> <br></br>
@@ -103,6 +104,8 @@ function Register( ) {
                                 height={200} 
                                 borderRadius={100} 
                                 ref={canvasRef}
+                                onMouseMove={() => setCusorEnable(true)}
+                                onMouseLeave={() => setCusorEnable(false)}
                             />
                             <div className='Input'>
                                 <input placeholder=" " required type='text' ref={userNameRef}></input>
