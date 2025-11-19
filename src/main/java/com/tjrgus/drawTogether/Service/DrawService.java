@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,7 +20,7 @@ public class DrawService {
     private PasswordEncoder passwordEncoder;
 
     public boolean drawAlready(DrawEntity drawEntity){
-        Optional<DrawEntity> searchDraw = drawRepository.findByUserId(drawEntity.getUserId());
+        Optional<DrawEntity> searchDraw = drawRepository.findByUserIdAndDrawNumber(drawEntity.getUserId(), drawEntity.getDrawNumber());
         return searchDraw.isPresent();
     }
 
@@ -36,8 +37,7 @@ public class DrawService {
         drawRepository.save(drawEntity);
     }
 
-    public DrawEntity getDrawHistory(String userId){
-        Optional<DrawEntity> d = drawRepository.findByUserId(userId);
-        return d.orElse(null);
+    public List<DrawEntity> getAllHistory(String userId){
+        return drawRepository.findAllByUserId(userId);
     }
 }

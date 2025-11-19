@@ -21,4 +21,6 @@ public class DrawEntity {
     @Column(name = "history")
     private String drawHistory;
 
+    @Column(name = "draw_number")
+    private Integer drawNumber;
 }
