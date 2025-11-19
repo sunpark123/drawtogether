@@ -57,7 +57,13 @@ const translations = {
 
         logout_message: "로그아웃",
 
+        top_tool_tool: "도구",
+        top_tool_size: "크기",
 
+        loader_load: "그림 불러오기",
+        loader_last_edit_day: "마지막 수정일",
+
+        saver_save: "그림 저장하기",
     },
     eng: {
         errorMessage_id_short: "ID must be at least 4 characters long.",
@@ -109,6 +115,14 @@ const translations = {
         profile_image_not_draw: "draw cancle",
 
         logout_message: "logout",
+
+        top_tool_tool: "Tools",
+        top_tool_size: "Size",
+
+        loader_load: "Load a Drawing",
+        loader_last_edit_day: "Last Edit Date",
+
+        saver_save: "Save a Drawing",
     },
 };
 

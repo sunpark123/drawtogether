@@ -75,7 +75,31 @@ export const userRegister = async ( userId, userPassword, userName ) => {
 	}
 };
 
-export const saveDrawHistory = async ( userId, drawHistory ) => {
+export const saveDrawImage = async ( drawImg, drawNumber ) => {
+	try {
+		const res = await fetch(drawImg);
+        const blob = await res.blob();
+		const formData = new FormData();
+
+		formData.append("drawImage", blob);
+		formData.append("drawNumber", drawNumber);
+
+		await api.post("/saveDrawImage", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+
+		return { success: true }
+
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+export const saveDrawHistory = async ( drawHistory, drawNumber ) => {
 	try {
 		const jsonStr = JSON.stringify(drawHistory);
 		const compressed = pako.gzip(jsonStr);
@@ -83,12 +107,13 @@ export const saveDrawHistory = async ( userId, drawHistory ) => {
 		const compressedBase64 = btoa(String.fromCharCode(...compressed));
 		
 		await api.post('/saveHistory', {
-			userId: userId,
 			drawHistory: compressedBase64,
+			drawNumber: drawNumber,
 		});
 		return { success: true }
 		
 	} catch (error) {
+		console.log(error.message);
 		return {
 			success: false,
 			error: error.response?.data || error.message
@@ -109,6 +134,23 @@ export const getDrawHistory = async ( userId ) => {
 		return { 
 			success: true,
 			drawHistory: data
+		}
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+export const getAllDraw = async ( userId ) => {
+	try {
+		const result = await api.get('/getAllHistory', {
+			params: { userId }
+		});
+		return { 
+			success: true,
+			allDraw: result.data
 		}
 		
 	} catch (error) {
