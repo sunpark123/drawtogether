@@ -25,10 +25,11 @@ public class DrawService {
     }
 
     public void updateDraw(DrawEntity drawEntity){
-        Optional<DrawEntity> searchDraw = drawRepository.findByUserId(drawEntity.getUserId());
+        Optional<DrawEntity> searchDraw = drawRepository.findByUserIdAndDrawNumber(drawEntity.getUserId(), drawEntity.getDrawNumber());
         if(searchDraw.isPresent()){
             DrawEntity newDrawEntity = searchDraw.get();
             newDrawEntity.setDrawHistory(drawEntity.getDrawHistory());
+            newDrawEntity.setLastEditDate(drawEntity.getLastEditDate());
             drawRepository.save(newDrawEntity);
         }
     }
@@ -37,7 +38,14 @@ public class DrawService {
         drawRepository.save(drawEntity);
     }
 
-    public List<DrawEntity> getAllHistory(String userId){
-        return drawRepository.findAllByUserId(userId);
+    public DrawEntity getDrawHistoryOfNumber(String userId, Integer drawNumber){
+        Optional<DrawEntity> drawEntity = drawRepository.findByUserIdAndDrawNumber(userId,drawNumber);
+        return drawEntity.orElse(null);
     }
+
+    public String getDrawLastEditDate(String userId, Integer drawNumber){
+        Optional<DrawEntity> drawEntity = drawRepository.findByUserIdAndDrawNumber(userId,drawNumber);
+        return drawEntity.map(DrawEntity::getLastEditDate).orElse(null);
+    }
+
 }

@@ -23,4 +23,7 @@ public class DrawEntity {
 
     @Column(name = "draw_number")
     private Integer drawNumber;
+
+    @Column(name = "last_edit_date")
+    private String lastEditDate;
 }
