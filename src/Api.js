@@ -120,10 +120,10 @@ export const saveDrawHistory = async ( drawHistory, drawNumber ) => {
 		}
 	}
 };
-export const getDrawHistory = async ( userId ) => {
+export const getDrawHistoryOfNumber = async ( userId, drawNumber ) => {
 	try {
-		const result = await api.get('/getHistory', {
-			params: { userId }
+		const result = await api.get('/getHistoryOfNumber', {
+			params: { userId, drawNumber }
 		});
 
 		const binarys = atob(result.data.drawHistory);
@@ -143,9 +143,26 @@ export const getDrawHistory = async ( userId ) => {
 		}
 	}
 };
+export const getAllDrawImage = async ( userId ) => {
+	try {
+		const result = await api.get('/getAllDrawImage', {
+			params: { userId }
+		});
+		return { 
+			success: true,
+			allDrawImage: result.data
+		}
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
 export const getAllDraw = async ( userId ) => {
 	try {
-		const result = await api.get('/getAllHistory', {
+		const result = await api.get('/getAllDraw', {
 			params: { userId }
 		});
 		return { 

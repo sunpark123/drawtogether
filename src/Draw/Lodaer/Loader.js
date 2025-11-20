@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { l } from '../../language';
 import './Loader.css'
 import { useNavigate } from 'react-router-dom';
+import { getAllDrawImage, getDrawHistoryOfNumber, userSessionCheck } from '../../Api';
 
-function Loader( { setLoaderEnable }){
+function Loader( { setLoaderEnable, setLoadHistoryRequest }){
 
     const navigate = useNavigate();
 
@@ -27,19 +28,59 @@ function Loader( { setLoaderEnable }){
 	const resetStyle = (n) => setStyle({number:n, transform: "perspective(350px) rotateX(0deg) rotateY(0deg)", trastransition: `all 3s`, background: `rgba(255, 255, 255, 0.8)` });
 
 
+    const getDrawHistory = (number) => {
+        (async () => {
+            const { success:sessionCheck, userId } = await userSessionCheck();
+            if (sessionCheck) {
+                const { success, drawHistory } = await getDrawHistoryOfNumber(userId, number);
+                if (success) {
+                    setLoaderEnable(false);
+                    setLoadHistoryRequest(drawHistory);
+                } 
+            }
+            else{
+                navigate("/login");
+            }
+        })();
+    }
+
+
+    const getAllDrawImageRequest = useCallback(() => {
+        (async () => {
+            const { success:sessionCheck, userId } = await userSessionCheck();
+            if (sessionCheck) {
+                const { success, allDrawImage } = await getAllDrawImage(userId);
+                if (success) {
+                    setAllDrawImage(allDrawImage)
+                } 
+            } else {
+                navigate("/login");
+            }
+        })();
+    }, [navigate]);
+
+    const [allDrawImage, setAllDrawImage] = useState([]);
+
+    useEffect(() => {
+        getAllDrawImageRequest();
+    }, [getAllDrawImageRequest]);
+
+
     return (
         <div className="Loader">
             <div className="drawSelectBox" style={{backgroundImage: "url('background.jpg') "}}>
                 <h1>{l("loader_load")}</h1>
                 <div className='menuWrap'>
-                    <div className="menu" onClick={() => navigate("/draw")} onMouseMove={(e) => handleMouseMove(3, e)}  onMouseLeave={() => resetStyle(3)} style={{
-                        transform: (style.number === 3) ? style.transform : 'none',
-                        background: (style.number === 3) ? style.background : 'rgba(255, 255, 255, 0.8)'
-                    }}>
-                        <img src="menu_3.png" alt="gameIcon"></img>
-                        <h1>2025. 03. 03</h1>
-                        <p>{l("loader_last_edit_day")}</p>
-                    </div>
+                    {allDrawImage.map((image, index) => (
+                            <div className="menu" key={index} onClick={() => getDrawHistory(index)} onMouseMove={(e) => handleMouseMove(index, e)}  onMouseLeave={() => resetStyle(index)} style={{
+                                transform: (style.number === index) ? style.transform : 'none',
+                                background: (style.number === index) ? style.background : 'rgba(255, 255, 255, 0.8)'
+                            }}>
+                                <img src={image.have? image.url : "noneDrawImage.png"} style={image.have ? {} : { height: "30px" }} alt="gameIcon"></img>
+                                <h1>{image.have ? image.lastEditDate : l("saved_empty")}</h1>
+                                <p>{image.have ? l("loader_last_edit_day") : l("loader_click_to_select")}</p>
+                            </div>
+                    ))}
                 </div>
                 <div className='close' onClick={() => setLoaderEnable(false)}>X</div>
             </div>

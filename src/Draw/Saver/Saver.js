@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { l } from '../../language';
 import './Saver.css'
-import {saveDrawHistory, saveDrawImage } from '../../Api'
+import {getAllDrawImage, saveDrawHistory, saveDrawImage, userSessionCheck } from '../../Api'
+import { useNavigate } from 'react-router-dom';
 
 function Saver( { setSaverEnable, saveHistory }){
     const [style, setStyle] = useState({});
+    
+    const navigate = useNavigate();
+
 
     const handleMouseMove = (number, e) => {
 		const rect = e.currentTarget.getBoundingClientRect();
@@ -21,30 +25,44 @@ function Saver( { setSaverEnable, saveHistory }){
 		});
 	};
 
+
 	const resetStyle = (n) => setStyle({number:n, transform: "perspective(350px) rotateX(0deg) rotateY(0deg)", trastransition: `all 3s`, background: `rgba(255, 255, 255, 0.8)` });
 
 
-    const getAllDrawRequest = () => {
+    const saveDrawHistoryRequest = (number) => {
         (async () => {
-            console.log(saveHistory)
-            const { success } = await saveDrawImage(saveHistory.drawImg, 3);
+            if(!saveHistory.history) return;
+
+            const { success } = await saveDrawImage(saveHistory.drawImg, number);
             if (success) {
-                console.log("저장됨ㄴㅁㅇㄴㅁㅇ!!");
-                const { success: historySuccess } = await saveDrawHistory(saveHistory.history, 3);
+                const { success: historySuccess } = await saveDrawHistory(saveHistory.history, number);
                 if(historySuccess)
                 {
-                    console.log("저장됨!!");
-                }
-                else{
-                    console.log(":nono")
+                    getAllDrawImageRequest();
                 }
             } 
-            else{
-                console.log("fas")
-            }
         })();
     }
 
+    const getAllDrawImageRequest = useCallback(() => {
+        (async () => {
+            const { success:sessionCheck, userId } = await userSessionCheck();
+            if (sessionCheck) {
+                const { success, allDrawImage } = await getAllDrawImage(userId);
+                if (success) {
+                    setAllDrawImage(allDrawImage)
+                } 
+            } else {
+                navigate("/login");
+            }
+        })();
+    }, [navigate]);
+    
+    const [allDrawImage, setAllDrawImage] = useState([]);
+
+    useEffect(() => {
+        getAllDrawImageRequest();
+    }, [getAllDrawImageRequest]);
 
 
     return (
@@ -52,15 +70,18 @@ function Saver( { setSaverEnable, saveHistory }){
             <div className="drawSelectBox" style={{backgroundImage: "url('background.jpg') "}}>
                 <h1>{l("saver_save")}</h1>
                 <div className='menuWrap'>
-                    <div className="menu" onClick={() => getAllDrawRequest()} onMouseMove={(e) => handleMouseMove(3, e)}  onMouseLeave={() => resetStyle(3)} style={{
-                        transform: (style.number === 3) ? style.transform : 'none',
-                        background: (style.number === 3) ? style.background : 'rgba(255, 255, 255, 0.8)'
-                    }}>
-                        <img src="menu_3.png" alt="gameIcon"></img>
-                        <h1>2025. 03. 03</h1>
-                        <p>{l("loader_last_edit_day")}</p>
-                    </div>
+                    {allDrawImage.map((image, index) => (
+                            <div className="menu" key={index} onClick={() => saveDrawHistoryRequest(index)} onMouseMove={(e) => handleMouseMove(index, e)}  onMouseLeave={() => resetStyle(index)} style={{
+                                transform: (style.number === index) ? style.transform : 'none',
+                                background: (style.number === index) ? style.background : 'rgba(255, 255, 255, 0.8)'
+                            }}>
+                                <img src={image.have? image.url : "noneDrawImage.png"} style={image.have ? {} : { height: "30px" }} alt="gameIcon"></img>
+                                <h1>{image.have ? image.lastEditDate : l("saved_empty")}</h1>
+                                <p>{image.have ? l("loader_last_edit_day") : l("loader_click_to_select")}</p>
+                            </div>
+                    ))}
                 </div>
+                
                 <div className='close' onClick={() => setSaverEnable(false)}>X</div>
             </div>
         </div>

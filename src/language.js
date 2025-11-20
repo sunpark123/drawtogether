@@ -62,8 +62,11 @@ const translations = {
 
         loader_load: "그림 불러오기",
         loader_last_edit_day: "마지막 수정일",
+        loader_click_to_select: "클릭하여 선택",
 
         saver_save: "그림 저장하기",
+
+        saved_empty: "비어있음",
     },
     eng: {
         errorMessage_id_short: "ID must be at least 4 characters long.",
@@ -121,8 +124,11 @@ const translations = {
 
         loader_load: "Load a Drawing",
         loader_last_edit_day: "Last Edit Date",
+        loader_click_to_select: "Click to Select",
 
         saver_save: "Save a Drawing",
+
+        saved_empty: "Empty",
     },
 };
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useImperativeHandle, useMemo  } from 'react';
 
-function Canvas( {width=200, height=200, borderRadius, ref, background=true, border=true, tool = "pen", size = 5, color="black", onMouseMove, onMouseLeave, sendHistory=null }) {
+function Canvas( {width=200, height=200, borderRadius, ref, background=true, border=true, tool = "pen", size = 5, color="black", onMouseMove, onMouseLeave, sendHistory=null, loadHistory=null }) {
 
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
@@ -11,8 +11,14 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
 
     useImperativeHandle(ref, () => canvasRef.current);
 
-    useEffect(() => {if(sendHistory !== null) sendHistory(...history)},[history, sendHistory])
+ 
+
+    useEffect(() => { setHistory(loadHistory);}, [loadHistory] )
+
+    useEffect(() => {if(sendHistory !== null) sendHistory(history)},[history, sendHistory])
+
     
+
     const pencil = useMemo(() => {
         const img = new Image();
         img.src = 'DrawTool/Pen/a.png';
