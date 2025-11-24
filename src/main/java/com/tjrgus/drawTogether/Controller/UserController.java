@@ -3,6 +3,7 @@ package com.tjrgus.drawTogether.Controller;
 import com.nimbusds.oauth2.sdk.Response;
 import com.tjrgus.drawTogether.Entity.UserEntity;
 import com.tjrgus.drawTogether.Service.UserService;
+import com.tjrgus.drawTogether.SessionUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SessionUser sessionUser;
+
     @GetMapping("/userSessionCheck")
     public ResponseEntity<?> userSessionCheck(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -37,7 +41,7 @@ public class UserController {
 
         if (session != null) {
             response.put("success", true);
-            response.put("userId", session.getAttribute("userId"));
+            response.put("userId", session.getAttribute(sessionUser.getUserId()));
         } else {
             response.put("success", false);
             response.put("userId", null);
@@ -64,7 +68,7 @@ public class UserController {
     public ResponseEntity<?> UserLogin(@RequestBody UserEntity userEntity, HttpServletRequest request){
         if(userService.userAlready(userEntity)){
             HttpSession session = request.getSession();
-            session.setAttribute("userId", userEntity.getUserId());
+            session.setAttribute(sessionUser.getUserId(), userEntity.getUserId());
 
             return ResponseEntity.ok().body("성공");
 
@@ -78,7 +82,7 @@ public class UserController {
     public ResponseEntity<?> UserRegister(@RequestBody UserEntity userEntity, HttpServletRequest request){
         if(!userService.userIdAlready(userEntity)){
             HttpSession session = request.getSession();
-            session.setAttribute("userId", userEntity.getUserId());
+            session.setAttribute(sessionUser.getUserId(), userEntity.getUserId());
             userService.saveUser((userEntity));
             return ResponseEntity.ok().body("OK");
         }
@@ -93,7 +97,7 @@ public class UserController {
         try{
             HttpSession session = request.getSession(false);
             if (session != null) {
-                String userId = session.getAttribute("userId").toString();
+                String userId = session.getAttribute(sessionUser.getUserId()).toString();
                 String saveName = userId+"_Image.png";
 
                 Path savePath = Paths.get("userProfileImage", saveName);
@@ -157,7 +161,7 @@ public class UserController {
     public ResponseEntity<?> changeUserName(@RequestBody UserEntity user, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
-            String userId = session.getAttribute("userId").toString();
+            String userId = session.getAttribute(sessionUser.getUserId()).toString();
             userService.changeUserName(userId, user.getUserName());
             return ResponseEntity.ok().body("OK");
         }
