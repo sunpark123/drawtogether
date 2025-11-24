@@ -44,10 +44,9 @@ function Draw () {
     const [cursorEnable, setCusorEnable] = useState(false);
 
     //
-    const [tool, setTool] = useState("pen");
+    const [tool, setTool] = useState("pen:pen");
     const [size, setSize] = useState(5);
-    const [color, setColor] = useState({r: 0, g: 0, b: 0, a: 1}
-);
+    const [color, setColor] = useState({r: 0, g: 0, b: 0, a: 1});
 
     const canvasRef = useRef();
 
@@ -72,6 +71,7 @@ function Draw () {
     const [saverEnable, setSaverEnable] = useState(false);
     
     const [saveHistory, setSaveHistory] = useState(null);
+    
     const sendHistory = useCallback((history) => {
         const canvas = canvasRef.current;
         const dataURL = canvas.toDataURL("image/png");
@@ -82,6 +82,8 @@ function Draw () {
     const [loadHistory, setLoadHistory] = useState([]);
 
     const setLoadHistoryRequest = (history) => {
+        if(loadHistory === history) return;
+        
         setLoadHistory(history);
         sendHistory(history);
     }

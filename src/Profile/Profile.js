@@ -111,7 +111,7 @@ function Profile( ) {
                                 onMouseMove={() => setCusorEnable(true)}
                                 onMouseLeave={() => setCusorEnable(false)}
                             />
-                            
+                     
                             <div className='Input'>
                                 <input placeholder=" " required type='text' ref={userNameRef}></input>
                                 <p>{l("input_name")}</p>

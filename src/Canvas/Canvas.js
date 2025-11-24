@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useImperativeHandle, useMemo  } from 'react';
 
-function Canvas( {width=200, height=200, borderRadius, ref, background=true, border=true, tool = "pen", size = 5, color="black", onMouseMove, onMouseLeave, sendHistory=null, loadHistory=null }) {
+function Canvas( {width=200, height=200, borderRadius, ref, background=true, border=true, tool = "pen:pen", size = 5, color={r: 0, g: 0, b: 0, a: 1}, onMouseMove, onMouseLeave, sendHistory=null, loadHistory=[] }) {
 
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
@@ -13,9 +13,12 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
 
  
 
-    useEffect(() => { setHistory(loadHistory);}, [loadHistory] )
+    useEffect(() => {
+        if(loadHistory.length === 0) return;
+        setHistory(loadHistory);
+    }, [loadHistory]);
 
-    useEffect(() => {if(sendHistory !== null) sendHistory(history)},[history, sendHistory])
+    useEffect(() => { if(sendHistory !== null) sendHistory(history) }, [history, sendHistory])
 
     
 
@@ -30,8 +33,13 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
         setUndoHistory([]);
         let dx = e.nativeEvent.offsetX;
         let dy = e.nativeEvent.offsetY
+
         if(tool.includes("line")) setCurrentStroke({ tool: tool, color: color, size: size, path: [{ x: dx, y: dy, }, {x: dx, y: dy}] });
         if(tool.includes("pen") || tool === "eraser") setCurrentStroke({ tool: tool, color: color, size: size, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
+
+        console.log(tool);
+        console.log(color);
+
     };
 
     const draw = (e) => {
@@ -49,7 +57,6 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
         setDrawing(false);
         setHistory(h => [...h, currentStroke]);
         setCurrentStroke(null);
-        
     }
     
     const reDrawCanvas = useCallback(() => {
@@ -69,14 +76,14 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
             if(drawInfo === null) return;
             
             const { tool, color, size, path: paths } = drawInfo;
-            if (paths.length < 2) return;
 
+
+            if (paths.length < 2) return;
             ctx.beginPath();
             ctx.strokeStyle = color;
             ctx.lineWidth = size;
             ctx.lineJoin = "round";
             ctx.lineCap = "round";
-            
             ctx.globalCompositeOperation = "source-over";
             ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
 
@@ -132,7 +139,7 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
 
             }
         };
-
+        if(history === null) return;
         history.forEach(drawInfo => {drawStroke(drawInfo)});
         if (currentStroke) drawStroke(currentStroke); 
         
