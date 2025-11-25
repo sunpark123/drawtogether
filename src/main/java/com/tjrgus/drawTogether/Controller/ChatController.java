@@ -14,7 +14,9 @@ import org.springframework.stereotype.Controller;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ChatController {
@@ -28,13 +30,25 @@ public class ChatController {
         this.messagingTemplate = messagingTemplate;
     }
 
+    private Map<String, List<ChatMessageDTO>> chatList = new HashMap<>();
+
+
     // 클라이언트가 /app/chat/{userId} 로 메시지 전송
     @MessageMapping("/chat/{roomId}")
     public void sendMessage(@Payload ChatMessageDTO chatMessageDTO, @DestinationVariable String roomId) {
         System.out.println(roomId + " : " + chatMessageDTO.getUserId() + " / " + chatMessageDTO.getMessage());
+    
+        chatList
+            .computeIfAbsent(roomId, k -> new ArrayList<>())
+            .add(chatMessageDTO);
+
         messagingTemplate.convertAndSend("/server/" + roomId, chatMessageDTO);
     }
-
+    @MessageMapping("/need/{roomId}")
+    public void returnAllChat(@Payload ChatMessageDTO chatMessageDTO, @DestinationVariable String roomId) {
+        System.out.println(chatMessageDTO.getUserId() + " /  리턴!!");
+        messagingTemplate.convertAndSend("/server/" + chatMessageDTO.getUserId(), chatList);
+    }
     @MessageMapping("/draw/{roomId}")
     public void sendDraw(@Payload DrawMessageDTO drawMessageDTO, @DestinationVariable String roomId) {
         System.out.println(drawMessageDTO.getDrawList());
@@ -44,5 +58,6 @@ public class ChatController {
         tempStorage.save(roomId, drawMessageDTO);
         System.out.println(tempStorage.find((roomId)));
     }
+
 
 }
