@@ -9,13 +9,26 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
+    
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new SessionCheckFilter())
+                .order(2)
+                .addPathPatterns("/draw", "/profile", "/lobby") //API 요청 이 주소로 했느,ㄴ데 세션 없으면 뺵
+                .excludePathPatterns(
+                        "/css/**",
+                        "/*.ico",
+                        "/error",
+                        "/login"
+                );
+    }
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -23,14 +36,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true);
     }
-// 특정 주소 갔을떄 세션 없으면 롤백
-//    @Bean
-//    public FilterRegistrationBean<SessionCheckFilter> sessionFilter() {
-//        FilterRegistrationBean<SessionCheckFilter> registrationBean = new FilterRegistrationBean<>();
-//        registrationBean.setFilter(new SessionCheckFilter());
-//        registrationBean.addUrlPatterns("/*");
-//        return registrationBean;
-//    }
+
+
 
 
 }
