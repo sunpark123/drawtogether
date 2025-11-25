@@ -65,8 +65,13 @@ const translations = {
         loader_click_to_select: "클릭하여 선택",
 
         saver_save: "그림 저장하기",
-
         saved_empty: "비어있음",
+        saved_overwrite_yes: "예",
+        saved_overwrite_no: "아니요",    
+        saved_overwrite_info: "기존 파일을 덮어쓸까요?",
+        
+        go_home_check_saved: "로비로 돌아가기",
+        go_home_check_not_saved: "저장 하러가기",
     },
     eng: {
         errorMessage_id_short: "ID must be at least 4 characters long.",
@@ -127,8 +132,10 @@ const translations = {
         loader_click_to_select: "Click to Select",
 
         saver_save: "Save a Drawing",
-
         saved_empty: "Empty",
+        saved_overwrite_yes: "Yes",
+        saved_overwrite_no: "No",    
+        saved_overwrite_info: "Overwrite existing file?",
     },
 };
 

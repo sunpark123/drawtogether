@@ -7,6 +7,7 @@ import Profile from "./Profile/Profile";
 import Lobby from "./Lobby/Lobby";
 import Logout from "./Login/Logined";
 import Draw from "./Draw/Draw";
+import DrawToGether from "./Draw/DrawToGether";
 
 
 function App() {
@@ -30,6 +31,7 @@ function AppContent() {
 				<Route path="/profile" element={<Profile/>} />
 				<Route path="/lobby" element={<Lobby/>} />
 				<Route path="/draw" element={<Draw/>} />
+				<Route path="/room" element={<DrawToGether/>} />
 			</Routes>
 		</>
 	);

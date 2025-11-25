@@ -3,9 +3,11 @@ import { l } from '../../language';
 import './Saver.css'
 import {getAllDrawImage, saveDrawHistory, saveDrawImage, userSessionCheck } from '../../Api'
 import { useNavigate } from 'react-router-dom';
+import SaveChecker from './SaveChecker';
 
 function Saver( { setSaverEnable, saveHistory }){
     const [style, setStyle] = useState({});
+    const [saveOverWriteChecker, setSaveOverWriteChecker] = useState(-1);
     
     const navigate = useNavigate();
 
@@ -38,6 +40,7 @@ function Saver( { setSaverEnable, saveHistory }){
                 const { success: historySuccess } = await saveDrawHistory(saveHistory.history, number);
                 if(historySuccess)
                 {
+                    setSaveOverWriteChecker(-1);
                     getAllDrawImageRequest();
                 }
             } 
@@ -65,26 +68,52 @@ function Saver( { setSaverEnable, saveHistory }){
     }, [getAllDrawImageRequest]);
 
 
+
+ 
+    const onClickItem = (image, index) => {
+        if (image.have) setSaveOverWriteChecker(index);
+        else saveDrawHistoryRequest(index);
+    };
+
     return (
-        <div className="Saver">
-            <div className="drawSelectBox" style={{backgroundImage: "url('background.jpg') "}}>
-                <h1>{l("saver_save")}</h1>
-                <div className='menuWrap'>
-                    {allDrawImage.map((image, index) => (
-                            <div className="menu" key={index} onClick={() => saveDrawHistoryRequest(index)} onMouseMove={(e) => handleMouseMove(index, e)}  onMouseLeave={() => resetStyle(index)} style={{
-                                transform: (style.number === index) ? style.transform : 'none',
-                                background: (style.number === index) ? style.background : 'rgba(255, 255, 255, 0.8)'
-                            }}>
-                                <img src={image.have? image.url : "noneDrawImage.png"} style={image.have ? {} : { height: "30px" }} alt="gameIcon"></img>
-                                <h1>{image.have ? image.lastEditDate : l("saved_empty")}</h1>
-                                <p>{image.have ? l("loader_last_edit_day") : l("loader_click_to_select")}</p>
-                            </div>
-                    ))}
+        <>
+            <div className="Saver" onClick={() => setSaverEnable(false)}>
+                <div className="drawSelectBox" style={{backgroundImage: "url('background.jpg') "}}>
+                    <h1>{l("saver_save")}</h1>
+                    <div className='menuWrap'>
+                        {allDrawImage.map((image, index) => {
+                            const isActive = style.number === index;
+
+                            const containerStyle = {
+                                transform: isActive ? style.transform : 'none',
+                                background: isActive ? style.background : 'rgba(255, 255, 255, 0.8)',
+                            };
+
+                            const imageSrc = image.have ? image.url : "noneDrawImage.png";
+                            const imgStyle = image.have ? {} : { height: "30px" };
+                            
+                            return (
+                                <div className="menu" key={index}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onClickItem(image, index);
+                                    }}
+                                    onMouseMove={(e) => handleMouseMove(index, e)}
+                                    onMouseLeave={() => resetStyle(index)}
+                                    style={containerStyle}
+                                >
+                                    <img src={imageSrc} style={imgStyle} alt="gameIcon" />
+                                    <h1>{image.have ? image.lastEditDate : l("saved_empty")}</h1>
+                                    <p>{image.have ? l("loader_last_edit_day") : l("loader_click_to_select")}</p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className='close' onClick={() => setSaverEnable(false)}>X</div>
                 </div>
-                
-                <div className='close' onClick={() => setSaverEnable(false)}>X</div>
             </div>
-        </div>
+            { saveOverWriteChecker >= 0 && <SaveChecker setSaveOverWriteChecker={setSaveOverWriteChecker} saveDrawHistoryRequest={() => saveDrawHistoryRequest(saveOverWriteChecker)}/> }
+        </>
     )
 }
 export default Saver;

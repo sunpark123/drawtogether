@@ -67,7 +67,7 @@ function Loader( { setLoaderEnable, setLoadHistoryRequest }){
 
 
     return (
-        <div className="Loader">
+        <div className="Loader" onClick={() => setLoaderEnable(false)}>
             <div className="drawSelectBox" style={{backgroundImage: "url('background.jpg') "}}>
                 <h1>{l("loader_load")}</h1>
                 <div className='menuWrap'>

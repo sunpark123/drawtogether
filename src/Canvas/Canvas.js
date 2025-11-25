@@ -36,10 +36,6 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
 
         if(tool.includes("line")) setCurrentStroke({ tool: tool, color: color, size: size, path: [{ x: dx, y: dy, }, {x: dx, y: dy}] });
         if(tool.includes("pen") || tool === "eraser") setCurrentStroke({ tool: tool, color: color, size: size, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
-
-        console.log(tool);
-        console.log(color);
-
     };
 
     const draw = (e) => {
