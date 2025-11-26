@@ -21,7 +21,7 @@ function MultiManager({message, sendMessage}) {
 
 
 
-    const [enable, setEnable] = useState(true);
+    const [enable, setEnable] = useState(false);
     const [userList] = useState([{userId:"gang"},{userId:"gang"},{userId:"gang"},{userId:"gang"}]);
 
     const inputRef = useRef(null);

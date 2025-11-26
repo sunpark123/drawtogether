@@ -58,7 +58,7 @@ function Register( ) {
 
         if(result.success) {
             saveCanvasImage();
-            window.location.href = "/logined";
+            window.location.href = "/lobby";
         }
         else{
             setErrorMessage(result.error);
