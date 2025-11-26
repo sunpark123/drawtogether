@@ -3,7 +3,7 @@ package com.tjrgus.drawTogether.Controller;
 import com.nimbusds.oauth2.sdk.Response;
 import com.tjrgus.drawTogether.Entity.UserEntity;
 import com.tjrgus.drawTogether.Service.UserService;
-import com.tjrgus.drawTogether.SessionUser;
+import com.tjrgus.drawTogether.Session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +30,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private SessionUser sessionUser;
-
     @GetMapping("/userSessionCheck")
     public ResponseEntity<?> userSessionCheck(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
         Map<String, Object> response = new HashMap<>();
-
         if (session != null) {
             response.put("success", true);
-            response.put("userId", session.getAttribute(sessionUser.getUserId()));
+            response.put("userId", session.getAttribute(SessionManager.USER_ID));
         } else {
             response.put("success", false);
             response.put("userId", null);
@@ -68,7 +64,7 @@ public class UserController {
     public ResponseEntity<?> UserLogin(@RequestBody UserEntity userEntity, HttpServletRequest request){
         if(userService.userAlready(userEntity)){
             HttpSession session = request.getSession();
-            session.setAttribute(sessionUser.getUserId(), userEntity.getUserId());
+            session.setAttribute(SessionManager.USER_ID, userEntity.getUserId());
 
             return ResponseEntity.ok().body("성공");
 
@@ -82,7 +78,7 @@ public class UserController {
     public ResponseEntity<?> UserRegister(@RequestBody UserEntity userEntity, HttpServletRequest request){
         if(!userService.userIdAlready(userEntity)){
             HttpSession session = request.getSession();
-            session.setAttribute(sessionUser.getUserId(), userEntity.getUserId());
+            session.setAttribute(SessionManager.USER_ID, userEntity.getUserId());
             userService.saveUser((userEntity));
             return ResponseEntity.ok().body("OK");
         }
@@ -97,7 +93,7 @@ public class UserController {
         try{
             HttpSession session = request.getSession(false);
             if (session != null) {
-                String userId = session.getAttribute(sessionUser.getUserId()).toString();
+                String userId = session.getAttribute(SessionManager.USER_ID).toString();
                 String saveName = userId+"_Image.png";
 
                 Path savePath = Paths.get("userProfileImage", saveName);
@@ -161,7 +157,7 @@ public class UserController {
     public ResponseEntity<?> changeUserName(@RequestBody UserEntity user, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
-            String userId = session.getAttribute(sessionUser.getUserId()).toString();
+            String userId = session.getAttribute(SessionManager.USER_ID).toString();
             userService.changeUserName(userId, user.getUserName());
             return ResponseEntity.ok().body("OK");
         }

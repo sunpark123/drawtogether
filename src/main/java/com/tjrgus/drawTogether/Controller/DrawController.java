@@ -4,7 +4,7 @@ import com.tjrgus.drawTogether.Entity.DrawEntity;
 import com.tjrgus.drawTogether.Entity.UserEntity;
 import com.tjrgus.drawTogether.Service.DrawService;
 import com.tjrgus.drawTogether.Service.UserService;
-import com.tjrgus.drawTogether.SessionUser;
+import com.tjrgus.drawTogether.Session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.Data;
@@ -32,15 +32,12 @@ public class DrawController {
     @Autowired
     private DrawService drawService;
 
-    @Autowired
-    private SessionUser sessionUser;
-
     @PostMapping("/saveDrawImage")
     public ResponseEntity<?> saveDrawImage(@RequestParam("drawImage") MultipartFile profileImage, @RequestParam("drawNumber") String drawNumber, HttpServletRequest request){
         try{
             HttpSession session = request.getSession(false);
             if (session != null) {
-                String userId = session.getAttribute(sessionUser.getUserId()).toString();
+                String userId = session.getAttribute(SessionManager.USER_ID).toString();
                 String saveName = userId+"_"+drawNumber+".png";
 
                 Path savePath = Paths.get("userDrawList", saveName);
@@ -65,7 +62,7 @@ public class DrawController {
     public ResponseEntity<?> saveHistory(@RequestBody DrawEntity drawEntity, HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if (session != null) {
-            String userId = session.getAttribute(sessionUser.getUserId()).toString();
+            String userId = session.getAttribute(SessionManager.USER_ID).toString();
             LocalDate today = LocalDate.now();
 
             drawEntity.setUserId(userId);

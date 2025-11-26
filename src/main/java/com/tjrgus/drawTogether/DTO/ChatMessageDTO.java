@@ -8,5 +8,4 @@ import lombok.Setter;
 public class ChatMessageDTO {
     private String userId;
     private String message;
-    private int code = 0;
 }

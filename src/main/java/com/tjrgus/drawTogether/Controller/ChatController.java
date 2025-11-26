@@ -2,6 +2,8 @@ package com.tjrgus.drawTogether.Controller;
 
 import com.tjrgus.drawTogether.DTO.ChatMessageDTO;
 import com.tjrgus.drawTogether.DTO.DrawMessageDTO;
+import com.tjrgus.drawTogether.DTO.MouseMessageDTO;
+import com.tjrgus.drawTogether.Service.ChatService;
 import com.tjrgus.drawTogether.TempStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -21,8 +23,9 @@ import java.util.Map;
 @Controller
 public class ChatController {
 
+
     @Autowired
-    private TempStorage tempStorage;
+    private ChatService chatService;
 
     private final SimpMessagingTemplate messagingTemplate;
 
@@ -30,34 +33,27 @@ public class ChatController {
         this.messagingTemplate = messagingTemplate;
     }
 
-    private Map<String, List<ChatMessageDTO>> chatList = new HashMap<>();
-
 
     // 클라이언트가 /app/chat/{userId} 로 메시지 전송
     @MessageMapping("/chat/{roomId}")
     public void sendMessage(@Payload ChatMessageDTO chatMessageDTO, @DestinationVariable String roomId) {
-        System.out.println(roomId + " : " + chatMessageDTO.getUserId() + " / " + chatMessageDTO.getMessage());
-    
-        chatList
-            .computeIfAbsent(roomId, k -> new ArrayList<>())
-            .add(chatMessageDTO);
+        chatService.addChatList(roomId,chatMessageDTO);
 
-        messagingTemplate.convertAndSend("/server/" + roomId, chatMessageDTO);
+        messagingTemplate.convertAndSend("/server/chat" + roomId, chatMessageDTO);
     }
     @MessageMapping("/need/{roomId}")
     public void returnAllChat(@Payload ChatMessageDTO chatMessageDTO, @DestinationVariable String roomId) {
-        System.out.println(chatMessageDTO.getUserId() + " /  리턴!!");
-        messagingTemplate.convertAndSend("/server/" + chatMessageDTO.getUserId(), chatList);
+        messagingTemplate.convertAndSend("/server/" + chatMessageDTO.getUserId(), chatService.getDrawList());
     }
     @MessageMapping("/draw/{roomId}")
     public void sendDraw(@Payload DrawMessageDTO drawMessageDTO, @DestinationVariable String roomId) {
-        System.out.println(drawMessageDTO.getDrawList());
-        messagingTemplate.convertAndSend("/server/" + roomId, drawMessageDTO);
+        chatService.addDrawList(roomId, drawMessageDTO);
 
-
-        tempStorage.save(roomId, drawMessageDTO);
-        System.out.println(tempStorage.find((roomId)));
+        messagingTemplate.convertAndSend("/server/draw/" + roomId, drawMessageDTO);
     }
 
-
+    @MessageMapping("/mouse/{roomId}")
+    public void sendMouse(@Payload MouseMessageDTO mouseMessageDTO, @DestinationVariable String roomId) {
+        messagingTemplate.convertAndSend("/server/mouse/" + roomId, mouseMessageDTO);
+    }
 }

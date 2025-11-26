@@ -8,8 +8,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SessionManager {
+    public static final String USER_ID = "userId";
+
     public void sessionAdd(HttpServletRequest request, String userId){
         HttpSession session = request.getSession();
-        session.setAttribute("userId", userId);
+        session.setAttribute(USER_ID, userId);
+
     }
 }

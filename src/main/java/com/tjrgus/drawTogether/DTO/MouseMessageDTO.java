@@ -1,12 +1,11 @@
 package com.tjrgus.drawTogether.DTO;
 
-import com.fasterxml.jackson.annotation.JsonRawValue;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class DrawMessageDTO {
+public class MouseMessageDTO {
     private String userId;
-    private String history;
+    private MousePos mousePos;
 }
