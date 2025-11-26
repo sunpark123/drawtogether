@@ -33,7 +33,7 @@ function GoHomeChecker ({ setGoHomeChecker}) {
                             transform: (style.number === 1) ? style.transform : 'none',
                             background: (style.number === 1) ? style.background : 'rgba(255, 255, 255, 0.8)',
                         }}>
-                            <img src="noneDrawImage.png" style={{ height: "50px" }} alt="gameIcon"></img>
+                            <img src="/noneDrawImage.png" style={{ height: "50px" }} alt="gameIcon"></img>
                             <h1 style={{ color:"blue" }}>{l("saved_overwrite_yes")}</h1>
                             <p>{l("go_home_check_saved")}</p>
                         </div>
@@ -41,7 +41,7 @@ function GoHomeChecker ({ setGoHomeChecker}) {
                             transform: (style.number === 2) ? style.transform : 'none',
                             background: (style.number === 2) ? style.background : 'rgba(255, 255, 255, 0.8)'
                         }}>
-                            <img src="noneDrawImage.png" style={{ height: "50px" }} alt="gameIcon"></img>
+                            <img src="/noneDrawImage.png" style={{ height: "50px" }} alt="gameIcon"></img>
                             <h1 style={{ color:"red" }}>{l("saved_overwrite_no")}</h1>
                             <p>{l("go_home_check_not_saved")}</p>
                         </div>

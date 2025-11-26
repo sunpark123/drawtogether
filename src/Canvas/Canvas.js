@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback, useImperativeHandle, useMemo  } from 'react';
+import { decode } from "@msgpack/msgpack";
+import pako from 'pako';
 
-function Canvas( {width=200, height=200, borderRadius, ref, background=true, border=true, tool = "pen:pen", size = 5, color={r: 0, g: 0, b: 0, a: 1}, onMouseMove, onMouseLeave, sendHistory=null, loadHistory=[] }) {
+function Canvas( {width=200, height=200, borderRadius, ref, background=true, border=true, tool = "pen:pen", size = 5, color={r: 0, g: 0, b: 0, a: 1}, onMouseMove, onMouseLeave, sendHistory=null, loadHistory=[], returnHistory , addHistory}) {
 
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
@@ -11,11 +13,39 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
 
     useImperativeHandle(ref, () => canvasRef.current);
 
- 
+    useEffect(() => {
+        if(!addHistory) return;
+        if(addHistory.length === 0) return;
+
+        const asd = decompressHistory(addHistory.history);
+        setHistory(h => [...h, asd[0]]);
+    }, [addHistory])
+
+    function decompressHistory(base64) {
+        const compressed = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+        const packed = pako.ungzip(compressed);
+        const { dict, data } = decode(packed);
+        return data.map(entry => {
+            const [toolId, size, [r, g, b, a], flat] = entry;
+
+            const path = [];
+            for (let i = 0; i < flat.length; i += 2) {
+            path.push({ x: flat[i], y: flat[i + 1] });
+            }
+
+            return {
+            tool: dict[toolId],
+            size,
+            color: { r, g, b, a },
+            path
+            };
+        });
+    }
+
 
     useEffect(() => {
         if(loadHistory.length === 0) return;
-        setHistory(loadHistory);
+            setHistory(loadHistory);
     }, [loadHistory]);
 
     useEffect(() => { if(sendHistory !== null) sendHistory(history) }, [history, sendHistory])
@@ -52,6 +82,7 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
     const stopDrawing = () => {
         setDrawing(false);
         setHistory(h => [...h, currentStroke]);
+        if(returnHistory) returnHistory([currentStroke]);
         setCurrentStroke(null);
     }
     
@@ -195,25 +226,27 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
    
 
     return (
-        <canvas
-            className='drawCanvas'
-            width={width}
-            height={height}
-            style={{
-                backgroundColor: 'transparent',
-                width: width,
-                height: height,
-                borderRadius: borderRadius,
-                border: border ? "1px solid black" : "none",
-                cursor: "none",
-            }}
-            ref={canvasRef}
-            onMouseDown={startDrawing}
-            onMouseMove={(e) => {draw(e); onMouseMove();}}
-            onMouseUp={stopDrawing}
-            onMouseLeave={() => onMouseLeave()}
-        >
-        </canvas>
+        <>
+            <canvas
+                className='drawCanvas'
+                width={width}
+                height={height}
+                style={{
+                    backgroundColor: 'transparent',
+                    width: width,
+                    height: height,
+                    borderRadius: borderRadius,
+                    border: border ? "1px solid black" : "none",
+                    cursor: "none",
+                }}
+                ref={canvasRef}
+                onMouseDown={startDrawing}
+                onMouseMove={(e) => {draw(e); onMouseMove();}}
+                onMouseUp={stopDrawing}
+                onMouseLeave={() => onMouseLeave()}
+            >
+            </canvas>
+        </>
     )
 }
 

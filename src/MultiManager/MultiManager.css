@@ -1,0 +1,129 @@
+@font-face {
+    font-family: 'SchoolSafetyRoundedSmile';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-R.woff2') format('woff2');
+    font-weight: normal;
+    font-display: swap;
+}
+
+.MultiManagerOpener{
+    position: absolute;
+    top: 95%;
+    left: 95%;
+    transform: translate(-50%,-50%);
+    background-color: white;
+    border-radius: 100%;
+    border: 1px solid gray;
+    width: 50px;
+    height: 50px;
+}
+.MutiManager *{margin: 0; padding: 0; font-family: 'SchoolSafetyRoundedSmile';}
+.MutiManager{
+    position: absolute;
+    top: 50%;
+    overflow: hidden;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: white;
+    border-radius: 15px;
+    border: 1px solid gray;
+    width: 1000px;
+    height: 700px;
+    animation: sizeSetMutiManager 1s;
+    .header{
+        width: 95%;
+        margin-left: 2.5%;
+        height: 100px;
+        float: left;
+        line-height: 100px;
+        text-align: center;
+        border-bottom: 1px solid lightgray;
+    }
+    .userList{
+        width: 40%;
+        height: calc(95% - 100px);
+        margin-top: 2.5%;
+        float: left;
+        border-right: 1px solid lightgray;
+        .user{
+            width: 90%;
+            margin-left: 5%;
+            margin-bottom: 20px;
+            height: 50px;
+            float: left;
+            border-radius: 5px;
+            outline: 1px solid black;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            transition: all 0.2s cubic-bezier(.25,.8,.25,1);
+            img{
+                width: 50px;
+                height: 50px;
+                float: left;
+                margin-left: 10px;
+            }
+            p{
+                float: left;
+                line-height: 50px;
+                margin-left: 20px;
+            }
+        }
+        .user:hover{
+            background-color: rgba(255, 255, 255, 0.452);
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        }
+    }
+    .chat{
+        width: 59%;
+        height: calc(95% - 100px);
+        margin-top: 2.5%;
+        float: left;
+        margin-left: 0.5%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        .message{
+            width: 100%;
+            float: left;
+         
+        }
+        .message *{
+            float: left;
+        }
+        .message #userId{
+            font-weight: bold;
+            margin-left: 10px;
+            
+        }
+        .message #userMessage{
+            padding-left: 5px;
+        }
+        .sendChat{
+            width: 100%;
+            height: 30px;
+            float: left;
+            margin-bottom: 10px;
+            margin-top: 20px;
+            margin-left: 5px;
+        }
+        input{
+            width: 85%;
+            height: 30px;
+            border-radius: 5px;
+            border: none;
+            outline: 1px solid gray;
+            
+            padding-left: 5px;
+            float: left;
+        }
+        button{
+            float: left;
+            width: 13%;
+            height: 30px;
+        }
+    }
+}
+
+@keyframes sizeSetMutiManager {
+    0% {width: 100px; height: 100px;}
+    50% { width: 1000px; height: 100px;}
+    100% {width: 1000px; height: 700px;}
+}

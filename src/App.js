@@ -31,6 +31,7 @@ function AppContent() {
 				<Route path="/profile" element={<Profile/>} />
 				<Route path="/lobby" element={<Lobby/>} />
 				<Route path="/draw" element={<Draw/>} />
+				<Route path="/room/:roomId" element={<Draw/>} />
 				<Route path="/room" element={<DrawToGether/>} />
 			</Routes>
 		</>

@@ -20,7 +20,7 @@ function Register( ) {
 		(async () => {
 			const { success } = await userSessionCheck();
 			if (success) {
-				navigate("/logined");
+				navigate("/lobby");
 			}
 		})();
 	});

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { l } from '../language';
 import './LobbyDrawSelect.css'
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+
 
 function LobbyDrawSelect( { setClose }){
 
@@ -26,7 +28,11 @@ function LobbyDrawSelect( { setClose }){
 
 	const resetStyle = (n) => setStyle({number:n, transform: "perspective(350px) rotateX(0deg) rotateY(0deg)", trastransition: `all 3s`, background: `rgba(255, 255, 255, 0.8)` });
 
-
+    const newRoomCode = () => {
+        const number = uuidv4().slice(0, 6).toUpperCase();
+        return number;
+    };
+    
     return (
         <div className="LobbyDrawSelect">
             <div className="drawSelectBox" style={{backgroundImage: "url('background.jpg') "}}>
@@ -39,7 +45,7 @@ function LobbyDrawSelect( { setClose }){
                         <h1>{l("menu_room_solo")}</h1>
                         <p>{l("menu_room_info_solo")}</p>
                     </div>
-                    <div className="menu" onMouseMove={(e) => handleMouseMove(4, e)}  onMouseLeave={() => resetStyle(4)} style={{
+                    <div className="menu" onClick={() => navigate("/room/" + newRoomCode())} onMouseMove={(e) => handleMouseMove(4, e)}  onMouseLeave={() => resetStyle(4)} style={{
                         transform: (style.number === 4) ? style.transform : 'none',
                         background: (style.number === 4) ? style.background : 'rgba(255, 255, 255, 0.8)'
                     }}>
