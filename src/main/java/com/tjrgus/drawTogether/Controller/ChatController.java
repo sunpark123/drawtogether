@@ -5,6 +5,7 @@ import com.tjrgus.drawTogether.DTO.DrawMessageDTO;
 import com.tjrgus.drawTogether.DTO.MouseMessageDTO;
 import com.tjrgus.drawTogether.Service.ChatService;
 import com.tjrgus.drawTogether.TempStorage;
+import com.tjrgus.drawTogether.WebSocket.RoomManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -27,6 +28,9 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
 
+    @Autowired
+    private RoomManager roomManager;
+
     private final SimpMessagingTemplate messagingTemplate;
 
     public ChatController(SimpMessagingTemplate messagingTemplate) {
@@ -39,11 +43,12 @@ public class ChatController {
     public void sendMessage(@Payload ChatMessageDTO chatMessageDTO, @DestinationVariable String roomId) {
         chatService.addChatList(roomId,chatMessageDTO);
 
-        messagingTemplate.convertAndSend("/server/chat" + roomId, chatMessageDTO);
+        messagingTemplate.convertAndSend("/server/chat/" + roomId, chatMessageDTO);
     }
     @MessageMapping("/need/{roomId}")
-    public void returnAllChat(@Payload ChatMessageDTO chatMessageDTO, @DestinationVariable String roomId) {
-        messagingTemplate.convertAndSend("/server/" + chatMessageDTO.getUserId(), chatService.getDrawList());
+    public void returnAllDraw(@Payload ChatMessageDTO chatMessageDTO, @DestinationVariable String roomId) {
+        List<DrawMessageDTO> RoomDrawList = chatService.getDrawList(roomId);
+        if(RoomDrawList != null) messagingTemplate.convertAndSend("/server/need/" + roomId + "/" + chatMessageDTO.getUserId(), RoomDrawList);
     }
     @MessageMapping("/draw/{roomId}")
     public void sendDraw(@Payload DrawMessageDTO drawMessageDTO, @DestinationVariable String roomId) {

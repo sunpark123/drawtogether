@@ -119,26 +119,15 @@ public class UserController {
 
     @GetMapping("/getUserProfileImage")
     public ResponseEntity<?> getUserProfileImage(@RequestParam String userId) {
-        try{
-            String saveName = userId+"_Image.png";
-            Path imagePath = Paths.get("userProfileImage", saveName);
 
-            if (!Files.exists(imagePath)) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("이미지 파일이 없습니다.");
-            }
+        String userProfileImage = userService.getUserProfileImage(userId);
 
-            byte[] imageBytes = Files.readAllBytes(imagePath);
-
-            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-
-            String contentType = Files.probeContentType(imagePath);
-
-            String returnImage = "data:" + contentType + ";base64," + base64Image;
-
-            return ResponseEntity.ok().body(returnImage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(userProfileImage == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("이미지 파일이 없습니다.");
+        }
+        else{
+            return ResponseEntity.ok().body(userProfileImage);
         }
     }
 
