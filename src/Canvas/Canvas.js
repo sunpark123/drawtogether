@@ -17,8 +17,15 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
         if(!addHistory) return;
         if(addHistory.length === 0) return;
 
-        const asd = decompressHistory(addHistory.history);
-        setHistory(h => [...h, asd[0]]);
+        const decodeHistory = decompressHistory(addHistory.history);
+        if(addHistory.code === 0) {
+            setHistory(h => [...h, decodeHistory[0]]);
+        }
+        else {
+            setHistory(h =>
+                h.filter(item => JSON.stringify(item) !== JSON.stringify(decodeHistory[0]))
+            );
+        }
     }, [addHistory])
 
     function decompressHistory(base64) {
@@ -82,7 +89,7 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
     const stopDrawing = () => {
         setDrawing(false);
         setHistory(h => [...h, currentStroke]);
-        if(returnHistory) returnHistory([currentStroke]);
+        if(returnHistory && currentStroke) returnHistory([currentStroke], 0);
         setCurrentStroke(null);
     }
     
@@ -101,7 +108,7 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
         
         const drawStroke = (drawInfo) => {
             if(drawInfo === null) return;
-            
+
             const { tool, color, size, path: paths } = drawInfo;
 
 
@@ -179,6 +186,35 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
     useEffect(() => {
         reDrawCanvas();
     }, [reDrawCanvas]);
+
+    const drawUndo = useCallback(() => {
+        setHistory(prev => {
+            if (prev.length === 0) return prev; 
+
+            const newHistory = [...prev]; 
+
+            const last = newHistory.pop();
+            setUndoHistory(pr => [...pr, last]);
+            
+            if(returnHistory) returnHistory([last], 1);
+            
+            return newHistory;
+        });
+    }, [returnHistory]);
+
+    const drawRedo = () => {
+        setUndoHistory(prev => {
+            if (prev.length === 0) return prev;
+            
+            const newHistory = [...prev];
+            
+            const last = newHistory.pop();
+            setHistory(h => [...h, last]);
+
+            return newHistory;
+        })
+    }
+
     useEffect(() => {
         const handleKeyDown = (event) => {
             if ((event.ctrlKey || event.metaKey) && event.code === "KeyZ") {
@@ -195,31 +231,10 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         }
-    }, []);
-    const drawUndo = () => {
-        setHistory(prev => {
-            if (prev.length === 0) return prev; 
+    }, [drawUndo]);
 
-            const newHistory = [...prev]; 
-
-            const last = newHistory.pop();
-            setUndoHistory(pr => [...pr, last]);
-
-            return newHistory;
-        });
-    }
-    const drawRedo = () => {
-        setUndoHistory(prev => {
-            if (prev.length === 0) return prev;
-            
-            const newHistory = [...prev];
-            
-            const last = newHistory.pop();
-            setHistory(h => [...h, last]);
-
-            return newHistory;
-        })
-    }
+    
+    
 
 
 

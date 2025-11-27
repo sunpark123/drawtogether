@@ -95,6 +95,7 @@ function Draw () {
     function compressHistory(history) {
         const dict = [];
         const dictIndex = {};
+        if(!history) return;
 
         function getToolId(tool) {
             if (dictIndex[tool] != null) return dictIndex[tool];
@@ -105,6 +106,7 @@ function Draw () {
         }
 
         const data = history.map(item => {
+            if(!item) return null;
             return [
                 getToolId(item.tool),
                 item.size,
@@ -121,41 +123,42 @@ function Draw () {
         return base64;
     }
     function decompressHistory(base64) {
-            const compressed = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
-            const packed = pako.ungzip(compressed);
-            const { dict, data } = decode(packed);
-            return data.map(entry => {
-                const [toolId, size, [r, g, b, a], flat] = entry;
-    
-                const path = [];
-                for (let i = 0; i < flat.length; i += 2) {
-                path.push({ x: flat[i], y: flat[i + 1] });
-                }
-    
-                return {
+        const compressed = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+        const packed = pako.ungzip(compressed);
+        const { dict, data } = decode(packed);
+        return data.map(entry => {
+            const [toolId, size, [r, g, b, a], flat] = entry;
+
+            const path = [];
+            for (let i = 0; i < flat.length; i += 2) {
+            path.push({ x: flat[i], y: flat[i + 1] });
+            }
+
+            return {
                 tool: dict[toolId],
                 size,
                 color: { r, g, b, a },
                 path
-                };
-            });
-        }
+            };
+        });
+    }
     
     
-    const { addHistory, sendDraw, userMouse, sendMousePos, allHistory, message, sendMessage } = useWebSocket(roomId ? roomId : null);
-    const returnHistory = (history) => {
+    const { addHistory, sendDraw, userMouse, sendMousePos, allHistory, message, sendMessage, userList } = useWebSocket(roomId ? roomId : null);
+    const returnHistory = (history, code) => {
         const historyZip = compressHistory(history);
-        sendDraw(historyZip);
+        sendDraw(historyZip, code);
     }
     const returnMousePos = (pos) => {
         sendMousePos(pos)
     }
+    
     useEffect(() => {
         if(!allHistory) return;
         if(allHistory.length === 0) return;
 
 
-        const decodeHistory = allHistory[0].map(item => 
+        const decodeHistory = allHistory.map(item => 
             decompressHistory(item.history)
         );
         const newHistory = decodeHistory.flat();
@@ -184,10 +187,10 @@ function Draw () {
                 loadHistory={loadHistory}
                 addHistory={addHistory}
             ></Canvas>
-            {cursorEnable && (<Cursor size={size} {...(roomId && { returnMousePos })} {...(userMouse && { userMouse })}/>)}
+            {cursorEnable && (<Cursor size={size} {...(roomId && { returnMousePos })} {...(userMouse && { userMouse, userList })}/>)}
             {loaderEnable && (<Loader setLoaderEnable={setLoaderEnable} setLoadHistoryRequest={setLoadHistoryRequest}/>)}
             {saverEnable && (<Saver setSaverEnable={setSaverEnable} saveHistory={saveHistory}/>)}
-            {roomId && (<MultiManager message={message} sendMessage={sendMessage}></MultiManager>)}
+            {roomId && (<MultiManager message={message} sendMessage={sendMessage} userList={userList} roomId={roomId}></MultiManager>)}
         </>
     )
 }

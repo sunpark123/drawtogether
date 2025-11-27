@@ -18,7 +18,7 @@ function Cursor( { size, returnMousePos, userMouse } ) {
 
         const timer = setTimeout(() => {
             returnMousePos(pos);
-        }, 10);
+        }, 100);
 
         return () => clearTimeout(timer);
     }, [pos,returnMousePos]);

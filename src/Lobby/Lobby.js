@@ -5,10 +5,9 @@ import LanguageSetter from '../LanguageSetter/LanguageSetter';
 import { userSessionCheck } from '../Api';
 import { useNavigate } from 'react-router-dom';
 import LobbyDrawSelect from './LobbyDrawSelect';
-
+import RoomList from './RoomList';
 
 function Lobby( ) {
-	
 	const navigate = useNavigate();
 	useEffect(() => {
 		(async () => {
@@ -41,6 +40,14 @@ function Lobby( ) {
 
 
 	const [openRoomSelect, setOpenDrawSelect] = useState(false);
+	const [code, setCode] = useState(0);
+	
+	const openSelector = (codeNumber) => {
+		setOpenDrawSelect(true);
+		setCode(codeNumber)
+	}
+
+	const [roomListEnable, setRoomListEnable] = useState(false);
 	return (
 		<>
 			<LanguageSetter />
@@ -53,7 +60,7 @@ function Lobby( ) {
 				</div>
 				<div className='menuBox'>
 					<div className='menuWrap'>
-						<div className="menu" onClick={() => setOpenDrawSelect(true)} onMouseMove={(e) => handleMouseMove(1, e)}  onMouseLeave={() => resetStyle(1)} style={{
+						<div className="menu" onClick={() => openSelector(0)} onMouseMove={(e) => handleMouseMove(1, e)}  onMouseLeave={() => resetStyle(1)} style={{
 							transform: (style.number === 1) ? style.transform : 'none',
 							background: (style.number === 1) ? style.background : 'rgba(255, 255, 255, 0.8)'
 						}}>
@@ -71,7 +78,7 @@ function Lobby( ) {
 						</div>
 					</div>
 					<div className='menuWrap'>
-						<div className="menu" onMouseMove={(e) => handleMouseMove(3, e)}  onMouseLeave={() => resetStyle(3)} style={{
+						<div className="menu" onClick={() => setRoomListEnable(true)} onMouseMove={(e) => handleMouseMove(3, e)}  onMouseLeave={() => resetStyle(3)} style={{
 							transform: (style.number === 3) ? style.transform : 'none',
 							background: (style.number === 3) ? style.background : 'rgba(255, 255, 255, 0.8)'
 						}}>
@@ -79,7 +86,7 @@ function Lobby( ) {
 							<h1>{l("menu_other")}</h1>
 							<p>{l("menu_info_other")}</p>
 						</div>
-						<div className="menu" onMouseMove={(e) => handleMouseMove(4, e)}  onMouseLeave={() => resetStyle(4)} style={{
+						<div className="menu" onClick={() => openSelector(1)} onMouseMove={(e) => handleMouseMove(4, e)}  onMouseLeave={() => resetStyle(4)} style={{
 							transform: (style.number === 4) ? style.transform : 'none',
 							background: (style.number === 4) ? style.background : 'rgba(255, 255, 255, 0.8)'
 						}}>
@@ -89,7 +96,8 @@ function Lobby( ) {
 						</div>
 					</div>
 				</div>
-				{openRoomSelect && (<LobbyDrawSelect setClose={setOpenDrawSelect}/>)}
+				{openRoomSelect && (<LobbyDrawSelect setClose={setOpenDrawSelect} code={code}/>)}
+				{roomListEnable && (<RoomList setClose={setRoomListEnable}/>)}
 			</div>
 		</>
 	);

@@ -59,7 +59,7 @@ function TopTools( {tool, setSizeRequest, addSizeRequest, size, setToolRequest, 
                     onMouseLeave={handleMouseUp}
                 >
                     <img
-                        src="DrawTool/Size/toolSizePlus.png"
+                        src="/DrawTool/Size/toolSizePlus.png"
                         alt="tool/size/plus"
                     />
                 </div>
@@ -73,7 +73,7 @@ function TopTools( {tool, setSizeRequest, addSizeRequest, size, setToolRequest, 
                     onMouseLeave={handleMouseUp}
                 >
                     <img
-                        src="DrawTool/Size/toolSizeMinus.png"
+                        src="/DrawTool/Size/toolSizeMinus.png"
                         alt="tool/size/minus"
                     />
                 </div>

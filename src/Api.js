@@ -257,3 +257,18 @@ export const changeUserName = async (userName ) => {
 		}
 	}
 };
+
+
+
+export const getAllRoom = async () => {
+    try {
+        const result = await api.get('/getAllRoom');
+		return { 
+			success: true,
+			roomList: result.data
+		};
+		
+    } catch (error) {
+        return { success: false };
+    }
+};

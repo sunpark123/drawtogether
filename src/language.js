@@ -51,6 +51,8 @@ const translations = {
         menu_room_multi: "같이하기",
         menu_room_info_multi: "다함께 재밌게 그려요",
 
+        menu_input_join_code: "방코드를 입력하세요!",
+        menu_button_join_code: "들어가기",
 
         profile_image_draw: "그리기",
         profile_image_not_draw: "그리기 취소",
@@ -72,6 +74,13 @@ const translations = {
         
         go_home_check_saved: "로비로 돌아가기",
         go_home_check_not_saved: "저장 하러가기",
+
+        room_list:"방 목록",
+        room_list_room_code: "방 코드 :",
+        room_list_room_count: "인원 수 :",
+        room_list_room_join: "들어가기 :",
+        room_list_room_join_button: "입장하기",
+        room_list_empty: "방이 없습니다. 만들어 볼까요?",
     },
     eng: {
         errorMessage_id_short: "ID must be at least 4 characters long.",
@@ -118,6 +127,9 @@ const translations = {
         menu_room_multi: "Together",
         menu_room_info_multi: "Let's drawing together",
 
+        menu_input_join_code: "Input Room Code",
+        menu_button_join_code: "Join Room",
+
 
         profile_image_draw: "draw",
         profile_image_not_draw: "draw cancle",
@@ -136,6 +148,13 @@ const translations = {
         saved_overwrite_yes: "Yes",
         saved_overwrite_no: "No",    
         saved_overwrite_info: "Overwrite existing file?",
+
+        room_list:"RoomList",
+        room_list_room_code: "RoomCode :",
+        room_list_room_count: "PlayerCount :",
+        room_list_room_join: "Join :",
+        room_list_room_join_button: "Join",
+        room_list_empty: "There are no rooms. Should we make one?",
     },
 };
 

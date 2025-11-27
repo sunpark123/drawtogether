@@ -1,0 +1,118 @@
+@font-face {
+    font-family: 'SchoolSafetyRoundedSmile';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-R.woff2') format('woff2');
+    font-weight: normal;
+    font-display: swap;
+}
+.RoomList *{font-family: 'SchoolSafetyRoundedSmile';}
+.RoomList{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    float: left;
+    background-color: rgba(0, 0, 0, 0.39);
+    .RoomBox{
+        overflow: hidden;
+        box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background-color: white;
+        border-radius: 15px;
+        outline: 1px solid gray;
+        width: 1000px;
+        height: 700px;
+        z-index: 200;
+        animation: sizeSetRoomList 1s;
+    }
+    .close{
+        font-family: 'Ownglyph_ParkDaHyun';
+        position: absolute;
+        top: 1%;
+        left: 100%;
+        cursor: pointer;
+        transform: translateX(-100%);
+        text-align: center;
+        line-height: 40px;
+        color: rgb(250, 136, 136);
+        font-size: xx-large;
+        font-weight: bold;
+        width: 40px;
+        height: 40px;
+    }
+    .close:hover{
+        color: rgb(255, 68, 68);
+    }
+    h1{
+        width: 100%;
+        height: 100px;
+        float: left;
+        text-align: center;
+        line-height: 100px;
+    }
+    .Room{
+        width: 95%;
+        height: 100px;
+        outline: 1px solid gray;
+        float: left;
+        border-radius: 5px;
+        margin-left: 2.5%;
+        background-color: white;
+        display: flex;
+        .roomBox{
+            height: 80px;
+            float: left;
+            border-right: 1px solid lightgray;
+            margin-top: 10px;
+        }
+        .roomHeader{
+            width: 100%;
+            height: 20px;
+            float: left;
+            line-height: 30px;
+            color: gray;
+            
+        }
+        .roomHeader p{margin-left: 10px;}
+        .roomMain{
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            float: left;
+       
+            img{
+                width: 30px;
+                height: 30px;
+                float: left;
+                margin-top: 15px;
+                margin-right: 10px;
+            }
+        }
+        button{
+            width: 60%;
+            margin: auto;
+            height: 45px;
+            border-radius: 5px;
+            border: none;
+            outline: 1px solid lightgray;
+        }
+        button:hover{
+            outline: 1px solid gray;
+            background-color: rgb(206, 206, 206);
+        }
+    }
+    .Room h1, .Room p{margin:0; padding:0;}
+
+}
+
+@keyframes sizeSetRoomList {
+    0% {width: 100px; height: 130px;}
+    50% { width: 1000px; height: 130px;}
+    100% {width: 1000px; height: 700px;}
+}

@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './MultiManager.css'
+import { l } from '../language';
 
-function MultiManager({message, sendMessage}) {
+function MultiManager({message, sendMessage, userList, roomId}) {
     const [style, setStyle] = useState({});
     const handleMouseMove = (number, e) => {
 		const rect = e.currentTarget.getBoundingClientRect();
@@ -20,9 +21,7 @@ function MultiManager({message, sendMessage}) {
 	const resetStyle = (n) => setStyle({number:n, transform: "perspective(350px) rotateX(0deg) rotateY(0deg)", trastransition: `all 3s`, background: `rgba(255, 255, 255, 0` });
 
 
-
-    const [enable, setEnable] = useState(false);
-    const [userList] = useState([{userId:"gang"},{userId:"gang"},{userId:"gang"},{userId:"gang"}]);
+    const [enable, setEnable] = useState(true);
 
     const inputRef = useRef(null);
         
@@ -35,15 +34,36 @@ function MultiManager({message, sendMessage}) {
         }
     }
     
+    const [beforeMessageLength, setBeforeMessageLength] = useState(0);
+    const [messageLength, setMessageLength] = useState(0);
+    useEffect(() => {
+        if(enable) setBeforeMessageLength(message.length);;
+
+        setMessageLength(message.length - beforeMessageLength);
+    }, [message, setMessageLength, beforeMessageLength, enable]);
+
+    const containerRef = useRef(null);
+
+    const scrollToBottom = () => {
+        if (containerRef.current) {
+            containerRef.current.scrollTop = containerRef.current.scrollHeight;
+        }
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [message]);
     return(
         <>
-            <div className="MultiManagerOpener" onClick={() => setEnable(!enable)}>
-                
+            <div className="MultiManagerOpener" onClick={() => {setEnable(!enable); setBeforeMessageLength(message.length);}}>
+                <img src='/chat.png' alt='chat'></img>
+                <h1>{messageLength}</h1>
             </div>
             {enable && (
                 <div className='MutiManager'>
+                    <div className='close' onClick={() => setEnable(false)}>X</div>
                     <div className='header'>
-                        <h1>RoomName</h1>
+                        <p>{l("room_list_room_code")} </p><h1>{roomId}</h1>
                     </div>
                     <div className='userList'>
                         {userList.map((user, index) => {
@@ -60,7 +80,7 @@ function MultiManager({message, sendMessage}) {
                                     onMouseLeave={() => resetStyle(index)}
                                     style={containerStyle}
                                 >
-                                <img src='/basicProfileImage.png' alt='profileImage'></img>
+                                <img src={user.userProfileImage} alt='profileImage'></img>
                                     <p>{user.userId}</p>
                                 </div>
                             );
@@ -68,24 +88,26 @@ function MultiManager({message, sendMessage}) {
                     </div>
                     
                     <div className='chat'>
-                        {message.map((chat, index) => {
-                            if (chat.message.includes("/alert")) {
-                                const newMessages = chat.message.replace("/alert", "");
-                                return (
-                                    <div className='message' key={index}>
-                                        <p style={{textAlign:"center", width:"100%", height:"30px"}} id='userId'>{chat.userId} {newMessages}</p>
-                                    </div>
-                                )
-                            }
-                            else{
-                                return (
-                                    <div className='message' key={index}>
-                                        <p id='userId'>{chat.userId} :</p>
-                                        <p id='userMessage'>{chat.message}</p>
-                                    </div>
-                                )
-                            }
-                        })}
+                        <div className='chatWrap' ref={containerRef}>
+                            {message.map((chat, index) => {
+                                if (chat.message.includes("/alert")) {
+                                    const newMessages = chat.message.replace("/alert", "");
+                                    return (
+                                        <div className='message' key={index}>
+                                            <p style={{textAlign:"center", width:"100%", height:"30px", color:'gray'}} id='userMessage'>{chat.userId} {newMessages}</p>
+                                        </div>
+                                    )
+                                }
+                                else{
+                                    return (
+                                        <div className='message' key={index}>
+                                            <p id='userId'>{chat.userId} :</p>
+                                            <p id='userMessage'>{chat.message}</p>
+                                        </div>
+                                    )
+                                }
+                            })}
+                        </div>
                         <form onSubmit={(e) => sendMessageRequest(e)}>
                             <div className='sendChat'>
                                 <input ref={inputRef}></input>
