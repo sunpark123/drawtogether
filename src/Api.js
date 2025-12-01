@@ -1,8 +1,8 @@
 import axios from 'axios';
 import pako from 'pako';
 
-
-const API_BASE_URL = 'http://192.168.0.91:1112/'; 
+const ipAddress = "3.38.195.72";
+const API_BASE_URL = `http://${ipAddress}:1112/`; 
 const api = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,

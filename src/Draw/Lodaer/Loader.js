@@ -76,7 +76,7 @@ function Loader( { setLoaderEnable, setLoadHistoryRequest }){
                                 transform: (style.number === index) ? style.transform : 'none',
                                 background: (style.number === index) ? style.background : 'rgba(255, 255, 255, 0.8)'
                             }}>
-                                <img src={image.have? image.url : "noneDrawImage.png"} style={image.have ? {} : { height: "30px" }} alt="gameIcon"></img>
+                                <img src={image.have? image.url : "/noneDrawImage.png"} style={image.have ? {} : { height: "30px" }} alt="gameIcon"></img>
                                 <h1>{image.have ? image.lastEditDate : l("saved_empty")}</h1>
                                 <p>{image.have ? l("loader_last_edit_day") : l("loader_click_to_select")}</p>
                             </div>

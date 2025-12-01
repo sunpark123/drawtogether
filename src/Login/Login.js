@@ -43,7 +43,7 @@ function Login( ) {
         if(userPassword.length < 7) {setErrorMessage(l("errorMessage_password_short")); return}
 
         const result = await userLogin(userId, userPassword);
-
+        
         if(result.success) {
             window.location.href = "/lobby";
         }

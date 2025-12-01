@@ -89,7 +89,7 @@ function Saver( { setSaverEnable, saveHistory }){
                                 background: isActive ? style.background : 'rgba(255, 255, 255, 0.8)',
                             };
 
-                            const imageSrc = image.have ? image.url : "noneDrawImage.png";
+                            const imageSrc = image.have ? image.url : "/noneDrawImage.png";
                             const imgStyle = image.have ? {} : { height: "30px" };
                             
                             return (

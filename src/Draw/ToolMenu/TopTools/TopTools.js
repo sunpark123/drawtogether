@@ -84,12 +84,7 @@ function TopTools( {tool, setSizeRequest, addSizeRequest, size, setToolRequest, 
 
     const SubToolButton = ({ imgSrc, imgAlt = "tool", toolName }) => {
         const { selectedSubtool, setSelectedSubtool } = useSubtool();
-        // useEffect(() => {
-        //     if (tool) {
-        //         setSelectedSubtool(tool);
-        //     }
-        // }, [tool]);
-        
+
         const handleClick = () => {
             setSelectedSubtool(toolName);
             setToolRequest(toolName)
@@ -148,7 +143,6 @@ function TopTools( {tool, setSizeRequest, addSizeRequest, size, setToolRequest, 
                 {tool.includes("pen") && (
                     <>
                         <SubToolButton imgSrc="/DrawTool/SideTool/tool_pen.png" toolName="pen:pen" />
-                        <SubToolButton imgSrc="/DrawTool/Pen/pencil.png" toolName="pen:pencil" />
                         <SubToolButton imgSrc="/DrawTool/Pen/highlighter.png" toolName="pen:highlighter" />
                         
                         {ColorSetter()}

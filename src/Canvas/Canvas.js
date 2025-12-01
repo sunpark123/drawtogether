@@ -258,7 +258,7 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
                 onMouseDown={startDrawing}
                 onMouseMove={(e) => {draw(e); onMouseMove();}}
                 onMouseUp={stopDrawing}
-                onMouseLeave={() => onMouseLeave()}
+                onMouseLeave={stopDrawing}
             >
             </canvas>
         </>
