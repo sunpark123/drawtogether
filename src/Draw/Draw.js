@@ -108,6 +108,7 @@ function Draw () {
         const data = history.map(item => {
             if(!item) return null;
             return [
+                item.id,
                 getToolId(item.tool),
                 item.size,
                 [item.color.r, item.color.g, item.color.b, item.color.a], 
@@ -127,7 +128,7 @@ function Draw () {
         const packed = pako.ungzip(compressed);
         const { dict, data } = decode(packed);
         return data.map(entry => {
-            const [toolId, size, [r, g, b, a], flat] = entry;
+            const [id, toolId, size, [r, g, b, a], flat] = entry;
 
             const path = [];
             for (let i = 0; i < flat.length; i += 2) {
@@ -135,6 +136,7 @@ function Draw () {
             }
 
             return {
+                id: id,
                 tool: dict[toolId],
                 size,
                 color: { r, g, b, a },

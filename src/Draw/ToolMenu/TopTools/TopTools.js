@@ -46,7 +46,7 @@ function TopTools( {tool, setSizeRequest, addSizeRequest, size, setToolRequest, 
                     <input
                         type="range"
                         min="1"
-                        max="100"
+                        max="500"
                         step="1"
                         value={size}
                         onChange={(e) => setSizeRequest(Number(e.target.value))}
@@ -153,6 +153,7 @@ function TopTools( {tool, setSizeRequest, addSizeRequest, size, setToolRequest, 
                         <SubToolButton imgSrc="/DrawTool/Line/line_line.png" toolName="line:line" />
                         <SubToolButton imgSrc="/DrawTool/Line/line_square.png" toolName="line:square" />
                         <SubToolButton imgSrc="/DrawTool/Line/line_triangle.png" toolName="line:triangle" />
+                        <SubToolButton imgSrc="/DrawTool/Line/line_circle.png" toolName="line:circle" />
                         
                         {ColorSetter()}
                     </>

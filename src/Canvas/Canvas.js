@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useImperativeHandle, useMemo  } from 'react';
 import { decode } from "@msgpack/msgpack";
 import pako from 'pako';
+import { v4 as uuidv4 } from 'uuid';
 
 function Canvas( {width=200, height=200, borderRadius, ref, background=true, border=true, tool = "pen:pen", size = 5, color={r: 0, g: 0, b: 0, a: 1}, onMouseMove, onMouseLeave, sendHistory=null, loadHistory=[], returnHistory , addHistory}) {
 
@@ -22,8 +23,8 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
             setHistory(h => [...h, decodeHistory[0]]);
         }
         else {
-            setHistory(h =>
-                h.filter(item => JSON.stringify(item) !== JSON.stringify(decodeHistory[0]))
+            setHistory(h => 
+                h.filter(item => item && item.id !== decodeHistory?.[0]?.id)
             );
         }
     }, [addHistory])
@@ -35,7 +36,7 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
         return data.map(entry => {
             if(!entry) return null;
 
-            const [toolId, size, [r, g, b, a], flat] = entry;
+            const [id, toolId, size, [r, g, b, a], flat] = entry;
 
             const path = [];
             for (let i = 0; i < flat.length; i += 2) {
@@ -43,6 +44,7 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
             }
 
             return {
+                id: id,
                 tool: dict[toolId],
                 size,
                 color: { r, g, b, a },
@@ -72,9 +74,10 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
         setUndoHistory([]);
         let dx = e.nativeEvent.offsetX;
         let dy = e.nativeEvent.offsetY
-
-        setCurrentStroke({ id: crypto.randomUUID(), tool: tool, color: color, size: size, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
+        const id = uuidv4();
+        setCurrentStroke({ id: id, tool: tool, color: color, size: size, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
     };
+    
     const draw = (e) => {
         if (!drawing) return;
 
@@ -165,6 +168,16 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
                         ctx.lineTo(x1, y2);
                         ctx.lineTo(midX, y1);
                         ctx.stroke();
+                    },
+                    circle: () => {
+                        const centerX = (x1 + x2) / 2; // 중심 x
+                        const centerY = (y1 + y2) / 2; // 중심 y
+                        const radiusX = Math.abs(x2 - x1) / 2; // x축 반지름
+                        const radiusY = Math.abs(y2 - y1) / 2; // y축 반지름
+
+                        ctx.beginPath();
+                        ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2); // 타원 그리기
+                        ctx.stroke();
                     }
                 };
 
@@ -201,7 +214,7 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
         });
     }, [returnHistory]);
 
-    const drawRedo = () => {
+    const drawRedo = useCallback(() => {
         setUndoHistory(prev => {
             if (prev.length === 0) return prev;
             
@@ -210,9 +223,11 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
             const last = newHistory.pop();
             setHistory(h => [...h, last]);
 
+            if(returnHistory) returnHistory([last], 0);
+
             return newHistory;
         })
-    }
+    }, [returnHistory])
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -230,7 +245,7 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         }
-    }, [drawUndo]);
+    }, [drawUndo, drawRedo]);
 
     
     
