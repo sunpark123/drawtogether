@@ -23,4 +23,7 @@ public class UserEntity {
 
     @Column(name = "name")
     private String userName;
+
+    @Column(name = "user_mail")
+    private String userMail;
 }

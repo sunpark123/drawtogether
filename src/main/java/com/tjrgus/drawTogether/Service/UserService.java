@@ -29,6 +29,10 @@ public class UserService {
         Optional<UserEntity> searchUser = userRepository.findByUserId(userEntity.getUserId());
         return searchUser.isPresent();
     }
+    public boolean userMailAlready(String mail){
+        Optional<UserEntity> searchUser = userRepository.findByUserMail(mail);
+        return searchUser.isPresent();
+    }
     public boolean userAlready(UserEntity userEntity){
         Optional<UserEntity> searchUser = userRepository.findByUserId(userEntity.getUserId());
         return searchUser.filter(entity -> passwordEncoder.matches(userEntity.getUserPassword(), searchUser.get().getUserPassword())).isPresent();
