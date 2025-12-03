@@ -1,8 +1,8 @@
 import axios from 'axios';
 import pako from 'pako';
 
-// const ipAddress = process.env.REACT_APP_API_URL;
-const API_BASE_URL = `http://localhost:1112/`; 
+const ipAddress = process.env.REACT_APP_API_URL;
+const API_BASE_URL = `http://${ipAddress}:1112/`; 
 const api = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
