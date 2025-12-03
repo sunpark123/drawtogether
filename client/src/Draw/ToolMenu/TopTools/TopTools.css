@@ -1,0 +1,84 @@
+@font-face {
+    font-family: 'Ownglyph_ParkDaHyun';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/Ownglyph_ParkDaHyun.woff2') format('woff2');
+    font-weight:lighter;
+    font-style: normal;
+}
+
+.TopTools{
+    position: fixed;
+    font-family: 'Ownglyph_ParkDaHyun';
+    font-size: x-large;
+    top: 0;
+    left: 0px;
+    width: calc(100vw);
+    min-width: 700px;
+    height: 50px;
+    z-index: 100;
+    background-color: lightgray;
+    border-bottom: 1px solid gray;
+    .tool, .toolB{
+        max-height: 50px;
+        float: left;
+        img{
+            width: 50px;
+            height: 50px;
+            float: left;
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+        }
+        p{
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+        }
+        input{
+            height: 50px;
+            margin-right: 10px;
+        }
+        cursor: pointer;
+    }
+    .tool#color{margin-top: 7px; float: none;}
+    
+    .tool:hover{
+        background-color: rgb(175, 173, 173);
+    }
+    .tool#gitColor{margin-left: 20px;}
+    #sizeP{
+        margin-left: 10px;
+        width: 130px;
+    }
+    #toolSizeI img{
+        width: 20px;
+        height: 20px;
+        margin: 15px;
+    }
+    .panel{
+        height: 50px;
+        width: 1px;
+        float: left;
+        margin: 0px 15px 0 15px;
+        border-right: 1px solid gray;
+    }
+    .colorTool{
+        position: absolute;
+        left: 100%;
+        top: 110%;
+        transform: translateX(-100%);
+    }
+    .colorTool input{
+        height: 15px;
+        text-align: center;
+    }
+    .colorBack{width: 45px; height: 45px; margin: 2px; border-radius: 2px; border: 1px solid white;}
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none
+}
+
+.TopTools *{
+    margin: 0; padding: 0;
+}

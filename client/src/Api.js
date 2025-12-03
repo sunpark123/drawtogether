@@ -1,0 +1,313 @@
+import axios from 'axios';
+import pako from 'pako';
+
+const ipAddress = process.env.REACT_APP_API_URL;
+const API_BASE_URL = `http://${ipAddress}:1112/`; 
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  
+});
+
+export const GET_SERVER_URL = () => {
+	return API_BASE_URL;
+}
+
+export const userSessionCheck = async () => {
+    try {
+        const response = await api.get('/userSessionCheck');
+        const data = response.data;
+		return { 
+			success: data.success, 
+			userId: data.userId 
+		};
+        
+		
+    } catch (error) {
+        return { success: false };
+    }
+};
+
+export const userLogout = async () => {
+    try {
+        await api.get('/userLogout');
+		return { 
+			success: true
+		};
+		
+    } catch (error) {
+        return { success: false };
+    }
+};
+
+export const userLogin = async ( userId, userPassword ) => {
+	try {
+		await api.post('/login', {
+			userId: userId,
+			userPassword: userPassword
+		});
+		return { success: true }
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+export const userRegister = async ( userId, userPassword, userName, mailInput ) => {
+	try {
+		await api.post('/register', {
+			userId: userId,
+			userPassword: userPassword,
+			userName: userName,
+			userMail: mailInput,
+		});
+		return { success: true }
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+
+export const saveDrawImage = async ( drawImg, drawNumber ) => {
+	try {
+		const res = await fetch(drawImg);
+        const blob = await res.blob();
+		const formData = new FormData();
+
+		formData.append("drawImage", blob);
+		formData.append("drawNumber", drawNumber);
+
+		await api.post("/saveDrawImage", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+
+		return { success: true }
+
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+export const saveDrawHistory = async ( drawHistory, drawNumber ) => {
+	try {
+		const jsonStr = JSON.stringify(drawHistory);
+		const compressed = pako.gzip(jsonStr);
+
+		const compressedBase64 = btoa(String.fromCharCode(...compressed));
+		
+		await api.post('/saveHistory', {
+			drawHistory: compressedBase64,
+			drawNumber: drawNumber,
+		});
+		return { success: true }
+		
+	} catch (error) {
+		console.log(error.message);
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+export const getDrawHistoryOfNumber = async ( userId, drawNumber ) => {
+	try {
+		const result = await api.get('/getHistoryOfNumber', {
+			params: { userId, drawNumber }
+		});
+
+		const binarys = atob(result.data.drawHistory);
+		const compresseds = new Uint8Array(binarys.split("").map(c => c.charCodeAt(0)));
+
+		const jsonStrs = pako.ungzip(compresseds, { to: "string" });
+		const data = JSON.parse(jsonStrs);
+		return { 
+			success: true,
+			drawHistory: data
+		}
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+export const getAllDrawImage = async ( userId ) => {
+	try {
+		const result = await api.get('/getAllDrawImage', {
+			params: { userId }
+		});
+		return { 
+			success: true,
+			allDrawImage: result.data
+		}
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+export const getAllDraw = async ( userId ) => {
+	try {
+		const result = await api.get('/getAllDraw', {
+			params: { userId }
+		});
+		return { 
+			success: true,
+			allDraw: result.data
+		}
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+
+export const saveUserProfileImage = async ( profileImage ) => {
+	try {
+		const res = await fetch(profileImage);
+        const blob = await res.blob();
+		const formData = new FormData();
+
+		formData.append("userImage", blob);
+
+		await api.post("/saveUserProfileImage", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+		return { success: true }
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+
+export const getUserProfileImage = async ( userId ) => {
+	try {
+		const result = await api.get('/getUserProfileImage', {
+			params: { userId }
+		});
+		
+		return { 
+			success: true,
+			userProfileImage: result.data
+		}
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+
+
+export const getUserName = async ( userId ) => {
+	try {
+		const result = await api.get('/getUserName', {
+			params: { userId }
+		});
+		
+		return { 
+			success: true,
+			userName: result.data
+		}
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+
+export const changeUserName = async (userName ) => {
+	try {
+		await api.post('/changeUserName', {
+			userName: userName
+		});
+		
+		return { 
+			success: true,
+		}
+		
+	} catch (error) {
+		return {
+			success: false,
+			error: error.response?.data || error.message
+		}
+	}
+};
+
+
+
+export const getAllRoom = async () => {
+    try {
+        const result = await api.get('/getAllRoom');
+		return { 
+			success: true,
+			roomList: result.data
+		};
+		
+    } catch (error) {
+        return { success: false };
+    }
+};
+
+
+export const requestMakeCode = async (mail) => {
+	try{
+		await api.get('/makeCode', {
+			params: { 
+				mail: mail
+			}
+		});
+		return {
+			success: true,
+		}
+	} catch (error) {
+		return {
+			success: false,
+			errorMessage: error.response?.data.errorMessage
+		}
+	}
+}
+
+export const requestCheckCode = async (mail, code) => {
+	try{
+		await api.get('/checkCode', {
+			params: { 
+				mail: mail,
+				code: code
+			}
+		});
+		return {
+			success: true,
+		}
+	} catch (error) {
+		return {
+			success: false, 
+			errorMessage: error.response?.data.errorMessage
+		}
+	}
+}
