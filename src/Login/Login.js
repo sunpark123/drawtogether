@@ -16,7 +16,7 @@ function Login( ) {
 				navigate("/lobby");
 			}
 		})();
-	});
+	},[navigate]);
 
 
     const [left, setLeft] = useState(50);
@@ -96,11 +96,11 @@ function Login( ) {
                     </div>
                     <div className='otherLogin'>
                         <button onClick={goGoogleoAuth}>
-                            <img src='/google.avif' alt='googleoAuth2'></img>
+                            <img src='/Image/google.avif' alt='googleoAuth2'></img>
                             <p>{l("oAuth_Google")}</p>
                         </button>
                         <button>
-                            <img src='/basicProfileImage.png' alt='googleoAuth2'></img>
+                            <img src='/Image/basicProfileImage.png' alt='googleoAuth2'></img>
                             <p>{l("oAuth_Gang")}</p>
                         </button>
                        

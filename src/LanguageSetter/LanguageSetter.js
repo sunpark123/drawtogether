@@ -14,7 +14,7 @@ function LanguageSetter( ) {
         <>
            <div className='LanguageSetter'>
                 <p>{getLanguage()}</p>
-                <img src='language.png' alt='languageSetting' onClick={() => cl()}></img>
+                <img src="/Image/language.png" alt='languageSetting' onClick={() => cl()}></img>
            </div>
         </>
     );

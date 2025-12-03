@@ -16,7 +16,7 @@ function Lobby( ) {
 				navigate("/login");
 			}
 		})();
-	});
+	},[navigate]);
 	
 
 	const [style, setStyle] = useState({});
@@ -64,7 +64,7 @@ function Lobby( ) {
 							transform: (style.number === 1) ? style.transform : 'none',
 							background: (style.number === 1) ? style.background : 'rgba(255, 255, 255, 0.8)'
 						}}>
-							<img src="menu_1.png" alt="gameIcon"></img>
+							<img src="/Image/menu_1.png" loading="lazy" alt="gameIcon"></img>
 							<h1>{l("menu_draw")}</h1>
 							<p>{l("menu_info_draw")}</p>
 						</div>
@@ -72,7 +72,7 @@ function Lobby( ) {
 							transform: (style.number === 2) ? style.transform : 'none',
 							background: (style.number === 2) ? style.background : 'rgba(255, 255, 255, 0.8)'
 						}}>
-							<img src="menu_2.png" alt="gameIcon"></img>
+							<img src="/Image/menu_2.png" loading="lazy" alt="gameIcon"></img>
 							<h1>{l("menu_profile")}</h1>
 							<p>{l("menu_info_profile")}</p>
 						</div>
@@ -82,7 +82,7 @@ function Lobby( ) {
 							transform: (style.number === 3) ? style.transform : 'none',
 							background: (style.number === 3) ? style.background : 'rgba(255, 255, 255, 0.8)'
 						}}>
-							<img src="menu_3.png" alt="gameIcon"></img>
+							<img src="/Image/menu_3.png" loading="lazy" alt="gameIcon"></img>
 							<h1>{l("menu_other")}</h1>
 							<p>{l("menu_info_other")}</p>
 						</div>
@@ -90,7 +90,7 @@ function Lobby( ) {
 							transform: (style.number === 4) ? style.transform : 'none',
 							background: (style.number === 4) ? style.background : 'rgba(255, 255, 255, 0.8)'
 						}}>
-							<img src="menu_4.png" alt="gameIcon"></img>
+							<img src="/Image/menu_4.png" loading="lazy" alt="gameIcon"></img>
 							<h1>{l("menu_join")}</h1>
 							<p>{l("menu_info_join")}</p>
 						</div>

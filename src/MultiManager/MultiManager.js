@@ -56,7 +56,7 @@ function MultiManager({message, sendMessage, userList, roomId}) {
     return(
         <>
             <div className="MultiManagerOpener" onClick={() => {setEnable(!enable); setBeforeMessageLength(message.length);}}>
-                <img src='/chat.png' alt='chat'></img>
+                <img src='/Image/chat.png' alt='chat'></img>
                 <h1>{messageLength}</h1>
             </div>
             {enable && (

@@ -53,7 +53,7 @@ function LobbyDrawSelect( { setClose, code = 0 }){
                             transform: (style.number === 3) ? style.transform : 'none',
                             background: (style.number === 3) ? style.background : 'rgba(255, 255, 255, 0.8)'
                         }}>
-                            <img src="menu_3.png" alt="gameIcon"></img>
+                            <img src="/Image/menu_3.png" alt="gameIcon"></img>
                             <h1>{l("menu_room_solo")}</h1>
                             <p>{l("menu_room_info_solo")}</p>
                         </div>
@@ -61,7 +61,7 @@ function LobbyDrawSelect( { setClose, code = 0 }){
                             transform: (style.number === 4) ? style.transform : 'none',
                             background: (style.number === 4) ? style.background : 'rgba(255, 255, 255, 0.8)'
                         }}>
-                            <img src="menu_4.png" alt="gameIcon"></img>
+                            <img src="/Image/menu_4.png" alt="gameIcon"></img>
                             <h1>{l("menu_room_multi")}</h1>
                             <p>{l("menu_room_info_multi")}</p>
                         </div>

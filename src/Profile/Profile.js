@@ -10,7 +10,7 @@ import Cursor from '../Canvas/Cursor';
 
 function Profile( ) {
 	const [reloadKey, setReloadKey] = useState(0);
-    const [userProfileImageURL, setUserProfileImageURL] = useState('/basicProfileImage.png')
+    const [userProfileImageURL, setUserProfileImageURL] = useState('/Image/basicProfileImage.png')
 
     const navigate = useNavigate();
     

@@ -55,6 +55,7 @@
         line-height: 100px;
     }
     .Room{
+        margin-top: 10px;
         width: 95%;
         height: 100px;
         outline: 1px solid gray;
@@ -64,6 +65,8 @@
         background-color: white;
         display: flex;
         .roomBox{
+            width: auto;
+            min-width: 150px;
             height: 80px;
             float: left;
             border-right: 1px solid lightgray;

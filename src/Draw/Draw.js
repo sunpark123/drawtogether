@@ -28,7 +28,7 @@ function Draw () {
 				navigate("/login");
 			}
 		})();
-	});
+	},[navigate]);
 
     useEffect(() => {
 

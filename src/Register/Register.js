@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import './Register.css';
-import { saveUserProfileImage, userRegister, userSessionCheck } from '../Api';
+import { requestCheckCode, requestMakeCode, saveUserProfileImage, userRegister, userSessionCheck } from '../Api';
 import { useNavigate } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
 import { l } from '../language';
@@ -23,7 +23,7 @@ function Register( ) {
 				navigate("/lobby");
 			}
 		})();
-	});
+	},[navigate]);
 
 
     const [left, setLeft] = useState(50);
@@ -43,7 +43,7 @@ function Register( ) {
     const registerRequest = async (e) => {
         e.preventDefault();
 
-        
+        if(!codeChecked) return;
 
         const userId = userIdRef.current.value;
         const userName = userNameRef.current.value;
@@ -54,7 +54,7 @@ function Register( ) {
         if(userName.length < 1) {setErrorMessage(l("errorMessage_name_short")); return}
         if(userPassword.length < 7) {setErrorMessage(l("errorMessage_password_short")); return}
 
-        const result = await userRegister(userId, userPassword, userName);
+        const result = await userRegister(userId, userPassword, userName, mailInput);
 
         if(result.success) {
             saveCanvasImage();
@@ -74,6 +74,40 @@ function Register( ) {
     }
     
     const [cursorEnable, setCusorEnable] = useState(false);
+
+
+    const [codeChecked, setCodeChecked] = useState(false);
+    const [reqeustMailCheck, setRequestMailCheck] = useState(false)
+    const [mailInput, SetMailInput] = useState("");
+    const codeRef = useRef(null);
+
+    const requestMailVerification = () => {
+        setErrorMessage("");
+        codeRef.current.value = "";
+        setRequestMailCheck(true);
+        (async () => {
+			const { success, errorMessage="error_unknown" } = await requestMakeCode(mailInput);
+			if (success) {
+				setRequestMailCheck(true);
+			}
+            else{
+                setRequestMailCheck(false);
+                setErrorMessage(l(errorMessage));
+            }
+		})();
+    }
+    const checkCode = () => {
+        setErrorMessage("");
+        (async () => {
+			const { success, errorMessage="error_unknown" } = await requestCheckCode(mailInput, codeRef.current.value);
+			if (success) {
+				setCodeChecked(true);
+			}
+            else{
+                setErrorMessage(l(errorMessage));
+            }
+		})();
+    }
     return (
         <>
             <LanguageSetter />
@@ -120,11 +154,43 @@ function Register( ) {
                                 <p>{l("input_userPassword")}</p>
                             </div>
                             
+                            <div className='Input'>
+                                <input
+                                    placeholder=" "
+                                    style={{ right: codeChecked ? "0px" : "90px" }}
+                                    type="text"
+                                    value={mailInput}
+                                    onChange={(e) => {if(!reqeustMailCheck) {SetMailInput(e.target.value)}}}
+                                    required
+                                />
+                                <p>{l("input_mail")}</p>
+                                {!codeChecked && (
+                                    <button type='button' onClick={() => requestMailVerification()}>
+                                        {!reqeustMailCheck ? "인증" : "재전송"}
+                                    </button>
+                                )}
+                                
+                            </div>
+                            <div className='Input' style={{visibility: (reqeustMailCheck ? "visible" : "hidden")}}> 
+                                <input placeholder=" " ref={codeRef} style={{ right: codeChecked ? "0px" : "90px" }} required type='text'></input>
+                                <p>{l("input_code")}</p>
+                                {!codeChecked && (
+                                    <button type='button' onClick={() => checkCode()}>확인</button>
+                                )}
+                            </div>
+                            
+
+
+
                             <div className='Error'>
                                 <p>{errorMesage}</p>
                             </div>
                             <div className='Submit'>
-                                <button type='submit'>{l("register_button")}</button>
+                                {codeChecked ? (
+                                    <button type='submit'>{l("register_button")}</button>
+                                ) : (
+                                    <button type='button' style={{backgroundColor:"lightgray" , cursor:"not-allowed"}}>{l("register_button")}</button>
+                                )}
                             </div>
                         </form>
                         <div className='Register'>

@@ -7,6 +7,11 @@ const translations = {
         errorMessage_password_short: "비밀번호는 8글자 이상이여야 합니다.",
         errorMessage_id_cant_use_underbar: "아이디에 언더바 사용 금지.",
         errorMessage_name_short: "이름은 2글자 이상이여야 합니다.",
+        errorMessage_email: "올바른 메일을 적어주세요.",
+        error_not_same_code: "올바르지 않은 코드입니다.",
+        error_expired_code: "만료된 코드입니다.",
+        error_mail_already: "이미 사용 중인 이메일입니다.",
+        error_mail_code_retry: "잠시 후에 다시 시도해주세요.",
 
 
         // 로그인, 회원가입
@@ -17,6 +22,8 @@ const translations = {
         input_userId: "아이디",
         input_userPassword: "비밀번호",
         input_name: "이름",
+        input_mail: "메일",
+        input_code: "코드",
 
         login_button: "로그인",
         register_button: "회원가입",
@@ -87,7 +94,13 @@ const translations = {
         errorMessage_password_short: "Password must be at least 8 characters long.",
         errorMessage_id_cant_use_underbar: "Do not use underscores in your ID.",
         errorMessage_name_short: "name must be at least two characters long.",
+        errorMessage_email: "Please enter the correct email address",
+        error_not_same_code: "An incorrect code",
+        error_expired_code: "Code has expired",
+        error_mail_already: "Email is already in use",
+        error_mail_code_retry: "Please try again later",
 
+        
         form_type_login: "Sign In",
         form_type_register: "Create Account",
         form_type_edit_profile: "Edit Profile",
@@ -95,6 +108,8 @@ const translations = {
         input_userId: "UserId",
         input_userPassword: "Password",
         input_name: "Name",
+        input_mail: "Mail",
+        input_code: "Code",
 
         login_button: "Login",
         register_button: "Register",
@@ -148,6 +163,9 @@ const translations = {
         saved_overwrite_yes: "Yes",
         saved_overwrite_no: "No",    
         saved_overwrite_info: "Overwrite existing file?",
+
+        go_home_check_saved: "Go To Lobby",
+        go_home_check_not_saved: "I Want Save My Draw",
 
         room_list:"RoomList",
         room_list_room_code: "RoomCode :",

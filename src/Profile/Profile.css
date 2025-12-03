@@ -81,7 +81,9 @@ body, #root{
             position: relative;
             margin-top: 15px;
             input{
-                width: 100%;
+                left: 0;
+                right: 0;
+                width: auto;
                 height: 80%;
                 position: absolute;
                 border: none;

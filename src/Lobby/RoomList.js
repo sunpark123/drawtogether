@@ -24,7 +24,7 @@ function RoomList( {setClose} ) {
                         <p>{l("room_list_room_count")}</p>
                     </div>
                     <div className='roomMain' style={{flexDirection:"row"}}>
-                        <img src='/user.png' alt="people"></img>
+                        <img src='/Image/user.png' alt="people"></img>
                         <h1 style={{lineHeight:"60px", width:"auto"}} >{roomCount}</h1> 
                     </div>
                 </div>
@@ -49,7 +49,7 @@ function RoomList( {setClose} ) {
                 setRoomList(roomList);
             }
         })();
-    })
+    },[])
 
     return (
         <>

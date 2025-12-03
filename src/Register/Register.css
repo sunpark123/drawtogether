@@ -58,7 +58,7 @@ body, #root{
 
     background-color: whitesmoke;
     width: 500px;
-    height: 630px;
+    height: 750px;
     position: absolute;
     top: 50%;
     left: 75%;
@@ -97,8 +97,26 @@ body, #root{
             margin-left: 10%;
             position: relative;
             margin-top: 15px;
+            button{
+                position: absolute;
+                width: 80px;
+                left: 100%;
+                top: 20%;
+                height: 85%;
+                border: none;
+                outline: 1px solid lightgray;
+                border-radius: 5px;
+                background-color: rgb(169, 169, 240);
+                transform: translate(-100%,0%);
+                color: white;
+            }
+            button:hover{
+                background-color: rgb(112, 112, 253);
+            }
             input{
-                width: 100%;
+                left: 0;
+                right: 0;
+                width: auto;
                 height: 80%;
                 position: absolute;
                 border: none;
@@ -308,7 +326,7 @@ Canvas{
 @keyframes sizeSetRegister {
     0% {width: 100px; height: 100px;}
     50% { width: 500px; height: 100px;}
-    100% {width: 500px; height: 630px;}
+    100% {width: 500px; height: 750px;}
 }
 
 @keyframes shake {

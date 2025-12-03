@@ -33,18 +33,20 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
         const packed = pako.ungzip(compressed);
         const { dict, data } = decode(packed);
         return data.map(entry => {
+            if(!entry) return null;
+
             const [toolId, size, [r, g, b, a], flat] = entry;
 
             const path = [];
             for (let i = 0; i < flat.length; i += 2) {
-            path.push({ x: flat[i], y: flat[i + 1] });
+                path.push({ x: flat[i], y: flat[i + 1] });
             }
 
             return {
-            tool: dict[toolId],
-            size,
-            color: { r, g, b, a },
-            path
+                tool: dict[toolId],
+                size,
+                color: { r, g, b, a },
+                path
             };
         });
     }
@@ -71,10 +73,8 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
         let dx = e.nativeEvent.offsetX;
         let dy = e.nativeEvent.offsetY
 
-        if(tool.includes("line")) setCurrentStroke({ tool: tool, color: color, size: size, path: [{ x: dx, y: dy, }, {x: dx, y: dy}] });
-        if(tool.includes("pen") || tool === "eraser") setCurrentStroke({ tool: tool, color: color, size: size, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
+        setCurrentStroke({ id: crypto.randomUUID(), tool: tool, color: color, size: size, path: [{ x: dx, y: dy, }, {x: dx+1, y: dy+1}] });
     };
-
     const draw = (e) => {
         if (!drawing) return;
 
@@ -83,7 +83,6 @@ function Canvas( {width=200, height=200, borderRadius, ref, background=true, bor
         
 
         if(tool.includes("line")) setCurrentStroke(s => ({ ...s, path: [s.path[0], { x: dx, y: dy }] }));
-
         if(tool.includes("pen") || tool === "eraser") setCurrentStroke(s => ({ ...s, path: [...s.path, { x: dx, y: dy }] }));
     };
     const stopDrawing = () => {

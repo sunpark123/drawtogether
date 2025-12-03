@@ -1,7 +1,7 @@
 import axios from 'axios';
 import pako from 'pako';
 
-const ipAddress = "3.38.195.72";
+const ipAddress = process.env.REACT_APP_API_URL;
 const API_BASE_URL = `http://${ipAddress}:1112/`; 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -58,12 +58,13 @@ export const userLogin = async ( userId, userPassword ) => {
 		}
 	}
 };
-export const userRegister = async ( userId, userPassword, userName ) => {
+export const userRegister = async ( userId, userPassword, userName, mailInput ) => {
 	try {
 		await api.post('/register', {
 			userId: userId,
 			userPassword: userPassword,
-			userName: userName
+			userName: userName,
+			userMail: mailInput,
 		});
 		return { success: true }
 		
@@ -272,3 +273,41 @@ export const getAllRoom = async () => {
         return { success: false };
     }
 };
+
+
+export const requestMakeCode = async (mail) => {
+	try{
+		await api.get('/makeCode', {
+			params: { 
+				mail: mail
+			}
+		});
+		return {
+			success: true,
+		}
+	} catch (error) {
+		return {
+			success: false,
+			errorMessage: error.response?.data.errorMessage
+		}
+	}
+}
+
+export const requestCheckCode = async (mail, code) => {
+	try{
+		await api.get('/checkCode', {
+			params: { 
+				mail: mail,
+				code: code
+			}
+		});
+		return {
+			success: true,
+		}
+	} catch (error) {
+		return {
+			success: false, 
+			errorMessage: error.response?.data.errorMessage
+		}
+	}
+}
