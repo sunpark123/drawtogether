@@ -110,8 +110,12 @@ REACT_APP_API_URL=
 
 ## 6. 시작 방법
 **client**
+
 ```npm start```
+
+
 **server**
+
  - Window
 ```
 #컴파일
