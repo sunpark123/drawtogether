@@ -51,6 +51,7 @@ Deployment: AWS EC2 (Ubuntu)
 **## 5. 환경변수 예시**
 
 server/.env
+```
   DB_USERNAME=
   DB_PASSWORD=
   DB_NAME=
@@ -62,7 +63,9 @@ server/.env
   
   MAIL_VERIFICATION_USERNAME=
   MAIL_VERIFICATION_PASSWORD=
-
+```
 
 client/.env
+```
   REACT_APP_API_URL=SERVER_API_REQUEST_URL
+```
