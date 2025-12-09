@@ -58,7 +58,7 @@ body, #root{
 
     background-color: whitesmoke;
     width: 500px;
-    height: 500px;
+    height: var(--h);
     position: absolute;
     top: 50%;
     left: 75%;
@@ -271,7 +271,7 @@ body, #root{
 @keyframes sizeSet {
     0% {width: 100px; height: 100px;}
     50% { width: 500px; height: 100px;}
-    100% {width: 500px; height: 500px;}
+    100% {width: 500px; height: var(--h);}
 }
 
 @keyframes shake {

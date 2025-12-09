@@ -21,16 +21,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth
-                    .anyRequest().permitAll()
-            )
-            .oauth2Login(oauth2 -> oauth2
-                    .defaultSuccessUrl("/oAuthLogin", true)
-            );
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/login", "/oauth2/**").permitAll()
+                        .anyRequest().authenticated()    // ⭐ 중요
+                )
+
+                .oauth2Login(oauth2 -> oauth2
+                        .defaultSuccessUrl("/oAuthLogin", true)
+                );
         return http.build();
     }
+
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {

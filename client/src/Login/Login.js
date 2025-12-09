@@ -52,10 +52,13 @@ function Login( ) {
         }
     }
 
+
+    const [useoAuth, ] = useState(false); 
+
     return (
         <>
             <LanguageSetter />
-            <div className="Login">
+            <div className="Login" style={{"--h": useoAuth ? "500px" : "370px"}}>
                 <div className='textBox' style={{left: `${left}%`}}>
 					<span>D</span><span>r</span><span>a</span><span>w</span> <br></br>
 					<span id='spanT'>T</span><span>o</span> <br></br>
@@ -87,24 +90,28 @@ function Login( ) {
                             <a href='/register'>{l("or_register_button")}</a>
                             <p>{l("or_register_text")}</p>
                         </div>
-
-                        <div className='or'>
-                            <span></span>
-                            <p>or</p>
-                            <span></span>
+                        {useoAuth && (
+                            <div className='or'>
+                                <span></span>
+                                <p>or</p>
+                                <span></span>
+                            </div>
+                        )}
+                        
+                    </div>
+                    {useoAuth && (
+                        <div className='otherLogin'>
+                            <button onClick={goGoogleoAuth}>
+                                <img src='/Image/google.avif' alt='googleoAuth2'></img>
+                                <p>{l("oAuth_Google")}</p>
+                            </button>
+                            <button>
+                                <img src='/Image/basicProfileImage.png' alt='googleoAuth2'></img>
+                                <p>{l("oAuth_Gang")}</p>
+                            </button>
+                        
                         </div>
-                    </div>
-                    <div className='otherLogin'>
-                        <button onClick={goGoogleoAuth}>
-                            <img src='/Image/google.avif' alt='googleoAuth2'></img>
-                            <p>{l("oAuth_Google")}</p>
-                        </button>
-                        <button>
-                            <img src='/Image/basicProfileImage.png' alt='googleoAuth2'></img>
-                            <p>{l("oAuth_Gang")}</p>
-                        </button>
-                       
-                    </div>
+                    )}
                     
                 </div>
             </div>

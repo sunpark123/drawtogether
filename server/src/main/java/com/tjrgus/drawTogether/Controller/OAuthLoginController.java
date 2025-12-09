@@ -35,6 +35,7 @@ public class OAuthLoginController {
         user.setUserId(googleUserId);
         user.setUserName(name);
         user.setUserPassword(null);
+        System.out.println("들어옴" + googleUserId + " / " + name);
 
         if(!userService.userIdAlready(user)) { userService.saveUser(user); }
 
