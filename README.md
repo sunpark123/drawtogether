@@ -3,18 +3,44 @@
 혼자 또는 여러 사용자가 함께 그릴 수 있는 화이트 보드 웹입니다.
 실시간으로 여러 사용자가 동시에 그리기, 지우기, 색상/브러시 변경, 채팅 등을 할 수 있습니다.
 
-## 목차
+REST API와 WebSocket을 역할에 맞게 분리하여 설계했으며,
+AWS 환경에 배포하여 실제 운영 가능한 구조로 구현했습니다.
+
+## 기술 스택
+
+**Frontend**
+
+<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
+
+**Backend**
+
+<img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=Java&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white">
+
+**Real-time Communication**
+
+<img src="https://img.shields.io/badge/STOMP-C93CD7?style=for-the-badge&logo=STOMP&logoColor=white"> <img src="https://img.shields.io/badge/SockJS-A82C32?style=for-the-badge&logo=SockJS&logoColor=white"> <img src="https://img.shields.io/badge/RESTful_API-1092AC?style=for-the-badge&logo=RESTful_API&logoColor=white">
+
+
+**Database**
+
+<img src="https://img.shields.io/badge/mariadb-003545?style=for-the-badge&logo=mariadb&logoColor=white">
+
+
+**Deployment**
+
+<img src="https://img.shields.io/badge/AWS-FFB71B?style=for-the-badge&logo=AWS&logoColor=white"> <img src="https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white">
+
+
+
+## 프로젝트 설명 목차
 
 1. 프로젝트 소개
 
 2. 핵심 기능
 
 3. 데모 / 스크린샷
-
-4. 기술 스택
    
-5. 환경변수 예시
-
+4. 환경변수 예시
 
 ## 1. 프로젝트 소개
 
@@ -59,32 +85,8 @@
 <img width="900" height="500" alt="image" src="https://github.com/user-attachments/assets/e616bea7-8334-4485-a277-647d3660cabd" />
 
 
-## 4. 기술 스택
 
-**Frontend**
-
-<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
-
-**Backend**
-
-<img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=Java&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white">
-
-**Real-time Communication**
-
-<img src="https://img.shields.io/badge/STOMP-C93CD7?style=for-the-badge&logo=STOMP&logoColor=white"> <img src="https://img.shields.io/badge/SockJS-A82C32?style=for-the-badge&logo=SockJS&logoColor=white"> <img src="https://img.shields.io/badge/RESTful_API-1092AC?style=for-the-badge&logo=RESTful_API&logoColor=white">
-
-
-**Database**
-
-<img src="https://img.shields.io/badge/mariadb-003545?style=for-the-badge&logo=mariadb&logoColor=white">
-
-
-**Deployment**
-
-<img src="https://img.shields.io/badge/AWS-FFB71B?style=for-the-badge&logo=AWS&logoColor=white"> <img src="https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white">
-
-
-## 5. 환경변수 예시
+## 4. 환경변수 예시
 
 **server/.env**
 ```
@@ -105,30 +107,4 @@ MAIL_VERIFICATION_PASSWORD=
 ```
 #API 요청 보낼 서버 주소
 REACT_APP_API_URL=
-```
-
-
-## 6. 시작 방법
-**client**
-
-```npm start```
-
-
-**server**
-
- - Window
-```
-#컴파일
-javac -d out (Get-ChildItem -Recurse src/*.java)
-
-#실행
-java -cp out com.example.Main
-```
-- Ubuntu/Linux
-```
-#컴파일
-javac -d out $(find src -name "*.java")
-
-#실행
-java -cp out com.example.Main
 ```
